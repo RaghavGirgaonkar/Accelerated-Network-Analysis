@@ -1,0 +1,4 @@
+function y = genqc(x, A, coeffs)
+
+phase = coeffs(1)*x + coeffs(2)*x.^2 + coeffs(3)*x.^3;
+y = sin(2*pi*phase);
