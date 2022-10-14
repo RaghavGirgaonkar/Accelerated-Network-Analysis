@@ -12,7 +12,8 @@ Q = fft(q);
 
 
 timesVec = ifft((Z.*conj(Q)));
-size(timesVec);
+
+
 % plot(real(timesVec));
 [max_val, max_sample] = max(real(timesVec));
 fprintf('The max value of t_a is = %f at time = %f\n',max_val,(1/sampling_freq)*max_sample);

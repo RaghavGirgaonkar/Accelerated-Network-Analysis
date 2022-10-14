@@ -26,14 +26,6 @@ psd = ones(1,nsamples_tot);
 %Generate signal
 signal = genqc(timeVecSig,A,coeffs);
 final_signal = [signal, zeros(1,(nsamples_tot-nsamples_sig))];
-%Shift the signal forward by t seconds
-t = 10;
-shifted_signal = [zeros(1,t*sampling_freq), signal, zeros(1, nsamples_tot - nsamples_sig - t*sampling_freq)];
-% plot(timeVecTot, shifted_signal);
-niter = 1000;
-SNRs = zeros(1,niter);
-
-for i = 1:niter
 %Plot signal 
 %plot(timeVecTot, final_signal);
 %Generate White Gaussian Noise
@@ -41,6 +33,10 @@ wgn = randn(1, nsamples_tot);
 % plot(timeVecTot, wgn);
 % hold on;
 % plot(timeVecTot, final_signal, 'r');
+%Shift the signal forward by 1 second
+t = 10;
+shifted_signal = [zeros(1,t*sampling_freq), signal, zeros(1, nsamples_tot - nsamples_sig - t*sampling_freq)];
+% plot(timeVecTot, shifted_signal);
 %Add noise to shifted signal to create total signal 
 total_signal = shifted_signal + wgn;
 % plot(timeVecTot, total_signal);
@@ -50,18 +46,12 @@ total_signal = shifted_signal + wgn;
 [ta, timesVec] = matchedfiltering(total_signal, final_signal, sampling_freq, psd);
 %Find SNR
 [max_val, max_sample] = max(real(timesVec));
-stdv = std(timesVec(1:4*sampling_freq));
-snr = max_val/stdv;
-fprintf("SNR is %f\n", snr);
-SNRs(i) = snr;
-end
-%Plot Histogram
-histogram(SNRs,50);
+stdv = std(timesVec())
 %Plot
-% plot(timeVecTot, timesVec);
-% title("Time Sequence of Matched Filtering")
-% xlabel("Seconds");
-% ylabel("Amplitude");
+plot(timeVecTot, timesVec);
+title("Time Sequence of Matched Filtering")
+xlabel("Seconds");
+ylabel("Amplitude");
 
 
 
