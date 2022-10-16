@@ -24,7 +24,8 @@ nsamples_tot = length(timeVecTot);
 %Generate PSD vector (assumed constant in this special case)
 psd = ones(1,nsamples_tot);
 %Generate signal
-signal = genqc(timeVecSig,A,coeffs,0);
+signal = genqc(timeVecSig,A,coeffs,3*pi/4);
+%plot(timeVecSig,signal);
 final_signal = [signal, zeros(1,(nsamples_tot-nsamples_sig))];
 %Shift the signal forward by t seconds
 t = 10;
@@ -56,7 +57,7 @@ fprintf("SNR is %f\n", snr);
 SNRs(i) = snr;
 end
 %Plot Histogram
-histogram(SNRs,50);
+% histogram(SNRs,50);
 %Plot
 % plot(timeVecTot, timesVec);
 % title("Time Sequence of Matched Filtering")
