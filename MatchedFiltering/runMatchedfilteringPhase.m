@@ -1,4 +1,4 @@
-%Script to run matchedfiltering with WGN
+%Script to run matchedfiltering with WGN with unknown initial phase
 
 %Specify initial parameters
 %Time length of signal and total time (in seconds)
@@ -23,12 +23,15 @@ nsamples_sig = length(timeVecSig);
 nsamples_tot = length(timeVecTot);
 %Generate PSD vector (assumed constant in this special case)
 psd = ones(1,nsamples_tot);
-%Generate signal
-signal = genqc(timeVecSig,A,coeffs,0);
-final_signal = [signal, zeros(1,(nsamples_tot-nsamples_sig))];
-%Shift the signal forward by t seconds
+%Generate signals q0 and q_pi/2
+q0 = genqc(timeVecSig,A,coeffs,0);
+q1 = genqc(timeVecSig,A,coeffs,pi/2);
+final_signal_q0 = [q0, zeros(1,(nsamples_tot-nsamples_sig))];
+final_signal_q1 = [q1, zeros(1,(nsamples_tot-nsamples_sig))];
+%Shift the signals forward by t seconds
 t = 10;
-shifted_signal = [zeros(1,t*sampling_freq), signal, zeros(1, nsamples_tot - nsamples_sig - t*sampling_freq)];
+shifted_signal_q0 = [zeros(1,t*sampling_freq), q0, zeros(1, nsamples_tot - nsamples_sig - t*sampling_freq)];
+shifted_signal_q1 = [zeros(1,t*sampling_freq), q1, zeros(1, nsamples_tot - nsamples_sig - t*sampling_freq)];
 % plot(timeVecTot, shifted_signal);
 niter = 1000;
 SNRs = zeros(1,niter);
@@ -42,17 +45,22 @@ wgn = randn(1, nsamples_tot);
 % hold on;
 % plot(timeVecTot, final_signal, 'r');
 %Add noise to shifted signal to create total signal 
-total_signal = shifted_signal + wgn;
+total_signal_q0 = shifted_signal_q0 + wgn;
+total_signal_q1 = shifted_signal_q1 + wgn;
 % plot(timeVecTot, total_signal);
 % hold on;
 % plot(timeVecTot, shifted_signal, 'r');
-%Run Matched Filtering
-[ta, timesVec] = matchedfiltering(total_signal, final_signal, sampling_freq, psd);
+%Run Matched Filtering on Both TimeSeries
+[ta0, timesVec0] = matchedfiltering(total_signal_q0, final_signal_q0, sampling_freq, psd);
+[ta1, timesVec1] = matchedfiltering(total_signal_q1, final_signal_q1, sampling_freq, psd);
+%Square and Add the two output timeseries
+timesVec = timesVec0.^2 + timesVec1.^2;
 %Find SNR
-[max_val, max_sample] = max(real(timesVec));
+[max_val, max_sample] = max(timesVec);
+% fprintf('The max value of FINAL t_a is = %f at time = %f\n',max_val,(1/sampling_freq)*max_sample);
 stdv = std(timesVec(1:4*sampling_freq));
-snr = max_val/stdv;
-fprintf("SNR is %f\n", snr);
+snr = sqrt(max_val/stdv);
+% fprintf("SNR is %f\n", snr);
 SNRs(i) = snr;
 end
 %Plot Histogram
