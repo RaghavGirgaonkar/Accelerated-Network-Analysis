@@ -28,7 +28,7 @@ signal = genqc(timeVecSig,A,coeffs,0);
 final_signal = [signal, zeros(1,(nsamples_tot-nsamples_sig))];
 %Shift the signal forward by t seconds
 t = 10;
-shifted_signal = [zeros(1,t*sampling_freq-1), signal, zeros(1, nsamples_tot - nsamples_sig - t*sampling_freq+1)];
+shifted_signal = [zeros(1,floor(t*sampling_freq)-1), signal, zeros(1, nsamples_tot - nsamples_sig - floor(t*sampling_freq)+1)];
 % plot(timeVecTot, shifted_signal);
 niter = 1000;
 SNRs = zeros(1,niter);

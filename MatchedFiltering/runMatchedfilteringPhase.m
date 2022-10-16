@@ -30,8 +30,8 @@ final_signal_q0 = [q0, zeros(1,(nsamples_tot-nsamples_sig))];
 final_signal_q1 = [q1, zeros(1,(nsamples_tot-nsamples_sig))];
 %Shift the signals forward by t seconds
 t = 10;
-shifted_signal_q0 = [zeros(1,t*sampling_freq-1), q0, zeros(1, nsamples_tot - nsamples_sig - t*sampling_freq+1)];
-shifted_signal_q1 = [zeros(1,t*sampling_freq-1), q1, zeros(1, nsamples_tot - nsamples_sig - t*sampling_freq+1)];
+shifted_signal_q0 = [zeros(1,floor(t*sampling_freq)-1), q0, zeros(1, nsamples_tot - nsamples_sig - floor(t*sampling_freq)+1)];
+shifted_signal_q1 = [zeros(1,floor(t*sampling_freq)-1), q1, zeros(1, nsamples_tot - nsamples_sig - floor(t*sampling_freq)+1)];
 % plot(timeVecTot, shifted_signal);
 niter = 1000;
 SNRs = zeros(1,niter);
