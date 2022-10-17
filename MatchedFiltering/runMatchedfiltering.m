@@ -12,7 +12,7 @@ b = 3;
 c = 3;
 coeffs = [a,b,c];
 %Sampling frequency (assumed 4 times that of the nyquist freq in specified QC)
-nyquist_freq = 2*(coeffs(1)*T_sig + coeffs(2)*T_sig.^2 + coeffs(3)*T_sig.^3);
+nyquist_freq = 2*(coeffs(1) + 2*coeffs(2)*T_sig + 3*coeffs(3)*T_sig.^2);
 sampling_freq = 4*nyquist_freq;
 sampling_interval = 1/sampling_freq;
 %Time vectors for signal and total series
@@ -57,7 +57,7 @@ fprintf("SNR is %f\n", snr);
 SNRs(i) = snr;
 end
 %Plot Histogram
-% histogram(SNRs,50);
+histogram(SNRs,50);
 %Plot
 % plot(timeVecTot, timesVec);
 % title("Time Sequence of Matched Filtering")
