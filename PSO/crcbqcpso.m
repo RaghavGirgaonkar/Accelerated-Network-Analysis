@@ -40,6 +40,7 @@ outStruct = struct('bestLocation',[],...
                     
 outResults = struct('allRunsOutput',struct('fitVal', [],...
                                            'qcCoefs',zeros(1,3),...
+                                           'estTa',[],...
                                            'estSig',zeros(1,nSamples),...
                                            'totalFuncEvals',[]),...
                     'bestRun',[],...
@@ -49,7 +50,8 @@ outResults = struct('allRunsOutput',struct('fitVal', [],...
                     'estAmp',[],...
                     'estPhase',[],...
                     'bestAmp',[],...
-                    'bestPhase',[]);
+                    'bestPhase',[],...
+                    'bestTime',[]);
 
 %Allocate storage for outputs: results from all runs are stored
 for lpruns = 1:nRuns
@@ -72,23 +74,32 @@ timeVecSig = (0:(sampling_freq*T_sig - 1))/sampling_freq;
 for lpruns = 1:nRuns   
     fitVal(lpruns) = outStruct(lpruns).bestFitness;
     outResults.allRunsOutput(lpruns).fitVal = fitVal(lpruns);
-    [~,qcCoefs] = fHandle(outStruct(lpruns).bestLocation);
+    [~,qcCoefs,ta_index] = fHandle(outStruct(lpruns).bestLocation);
+%     Q = qcCoefs
+%     index = ta_index
     outResults.allRunsOutput(lpruns).qcCoefs = qcCoefs;
+    %Calculate time using sampling freq and ta_index
+    estTa = ta_index/sampling_freq;
+    
+    outResults.allRunsOutput(lpruns).estTa = estTa;
     estSigq0 = genqc(timeVecSig,1,qcCoefs,0);
     estSigq1 = genqc(timeVecSig,1,qcCoefs,pi/2);
-    estSigq0_shifted = [zeros(1,floor(timeshift*sampling_freq)-1), estSigq0, zeros(1, nSamples - nSamplesSig - floor(timeshift*sampling_freq)+1)];
-    estSigq1_shifted = [zeros(1,floor(timeshift*sampling_freq)-1), estSigq1, zeros(1, nSamples - nSamplesSig - floor(timeshift*sampling_freq)+1)];
+    estSigq0_shifted = [zeros(1,floor(estTa*sampling_freq)-1), estSigq0, zeros(1, nSamples - nSamplesSig - floor(estTa*sampling_freq)+1)];
+    estSigq1_shifted = [zeros(1,floor(estTa*sampling_freq)-1), estSigq1, zeros(1, nSamples - nSamplesSig - floor(estTa*sampling_freq)+1)];
 %     sizeq0 = size(estSigq0_shifted)
     %Estimated Phase
     yq0 = inParams.dataY*estSigq0_shifted(:);
     yq1 = inParams.dataY*estSigq1_shifted(:);
-    estPhase = atan(yq1/yq0);
+    estPhase = atan2(yq1,yq0);
     outResults.allRunsOutput(lpruns).estPhase = estPhase;
-    estSigTemp = genqc(timeVecSig,1,qcCoefs,estPhase);
-    estSigTemp_shifted = [zeros(1,floor(timeshift*sampling_freq)-1), estSigTemp, zeros(1, nSamples - nSamplesSig - floor(timeshift*sampling_freq)+1)];
+%     estSigTemp = genqc(timeVecSig,1,qcCoefs,estPhase);
+%     estSigTemp_shifted = [zeros(1,floor(timeshift*sampling_freq)-1), estSigTemp, zeros(1, nSamples - nSamplesSig - floor(timeshift*sampling_freq)+1)];
     %Estimated Amplitude
-    estAmp = inParams.dataY*estSigTemp_shifted(:);
+    estAmp = cos(estPhase)*yq0 + sin(estPhase)*yq1;
     outResults.allRunsOutput(lpruns).estAmp = estAmp;
+    %Estimated Signal
+    estSigTemp = genqc(timeVecSig,1,qcCoefs,estPhase);
+    estSigTemp_shifted = [zeros(1,floor(estTa*sampling_freq)-1), estSigTemp, zeros(1, nSamples - nSamplesSig - floor(estTa*sampling_freq)+1)];
     estSig = estAmp*estSigTemp_shifted;
     outResults.allRunsOutput(lpruns).estSig = estSig;
     outResults.allRunsOutput(lpruns).totalFuncEvals = outStruct(lpruns).totalFuncEvals;
@@ -101,4 +112,5 @@ outResults.bestSig = outResults.allRunsOutput(bestRun).estSig;
 outResults.bestAmp = outResults.allRunsOutput(bestRun).estAmp;
 outResults.bestPhase = outResults.allRunsOutput(bestRun).estPhase;
 outResults.bestQcCoefs = outResults.allRunsOutput(bestRun).qcCoefs;
+outResults.bestTime = outResults.allRunsOutput(bestRun).estTa;
 

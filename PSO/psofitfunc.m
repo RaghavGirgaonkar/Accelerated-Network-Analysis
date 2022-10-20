@@ -19,18 +19,19 @@ for lpc = 1:nVecs
     % Only the body of this block should be replaced for different fitness
     % functions
         x = xVec(lpc,:);
-        fitVal(lpc) = mfqc(x, params);
+        [fitVal(lpc), max_index] = mfqc(x, params);
     end
 end
 
-%Return real coordinates if requested
-if nargout > 1
-    varargout{1}=xVec;
+%Return max_index if requested
+if nargout > 2
+    varargout{1} = xVec;
+    varargout{2}=max_index;
 end
 
 %Max of matchedfiltering series after maximizing over amplitude and phase
 %parameters
-function mfVal = mfqc(x,params)
+function [mfVal, max_arg] = mfqc(x,params)
 %Generate normalized quadratic chirp
 phaseVec = x(1)*params.dataX + x(2)*params.dataXSq + x(3)*params.dataXCb;
 q0 = sin(2*pi*phaseVec);
@@ -41,4 +42,5 @@ q1 = q1/norm(q1);
 %Compute fitness value after maximizing by matched filtering
 m1 = matchedfiltering(params.dataY, q0);
 m2 = matchedfiltering(params.dataY, q1);
-mfVal = -1*max(m1.^2 + m2.^2);
+[max_val, max_arg] = max(m1.^2 + m2.^2);
+mfVal = -1*max_val;
