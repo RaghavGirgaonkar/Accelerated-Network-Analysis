@@ -24,7 +24,7 @@ for lpc = 1:nVecs
 end
 
 %Return max_index if requested
-if nargout > 2
+if nargout > 1
     varargout{1} = xVec;
     varargout{2}=max_index;
 end
