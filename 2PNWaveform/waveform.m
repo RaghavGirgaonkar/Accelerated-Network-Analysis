@@ -33,12 +33,16 @@ alpha4 = 2*pi*fmin*3*tau2;
 
 alpha = [alpha0, alpha1, alpha2, alpha3, alpha4];
 
-A = fvec.^(-7/6);
+A = zeros(size(fvec));
 
-alphaTerm = 0;
+A(2:end) = fvec(2:end).^(-7/6);
 
-for i = 0:4
-    alphaTerm = alphaTerm + alpha(i+1)*(fvec./fmin).^((-5+i)/3);
+A(end-9:end)
+
+alphaTerm = zeros(size(fvec));
+
+for k = 0:4
+    alphaTerm(2:end) = alphaTerm(2:end) + alpha(k+1)*(fvec(2:end)./fmin).^((-5+k)/3);
 
 end
 
@@ -48,7 +52,7 @@ Psi = 2*pi*t*fvec - phase - pi/4 + alphaTerm;
 
 %Final Expression
 
-fwave = A.*exp(-1*i*Psi);
+fwave = A.*exp(-1*1j*Psi);
 
 
 
