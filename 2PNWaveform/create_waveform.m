@@ -3,8 +3,9 @@
 T_sig = 54;
 %% Sampling Frequency
 Fs = 2048;
-%% Number of samples = 3*Fs*T_sig
-N = floor(3*T_sig*Fs);
+%% Number of samples = num*Fs*T_sig
+num = 3;
+N = floor(num*T_sig*Fs);
 timeVec = (0:N-1)*(1/Fs);
 %% Min and Max Frequencies Hz
 fmin = 30;
@@ -31,9 +32,9 @@ fvec = [fpos, fneg];
 %% Create 2PN Waveform in Fourier Domain
 % fwave = waveform(fvec,ta,phase,fmin,m1,m2);
 % fwave_t = fwave;
-fwavepos = waveform(fpos,ta,phase,fmin,m1,m2);
-fwaveneg = waveform(fneg,ta,phase,fmin,m1,m2);
-fwave = [fwavepos, fwaveneg];
+fwave = waveform(fpos,ta,phase,fmin,m1,m2);
+% fwaveneg = waveform(fneg,ta,phase,fmin,m1,m2);
+% fwave = [fwavepos, fwaveneg];
 fwave_t = fwave;
 % plot(abs(fwave));
 % plot(fftshift(abs(fwave)));
@@ -50,7 +51,9 @@ fwave(floor(N/2) + floor(N/2) - min_index + 3:end) = 0;
 % plot(fftshift(abs(fwave)));
 wave = ifft(fwave);
 %% Plots
-plot(real(wave));
+plot(timeVec,wave);
+xlabel("Seconds");
+title("2PN Waveform 30-700Hz")
 % hold on;
 % plot(timeVec,imag(wave));
 %plot(fvec, fwave);

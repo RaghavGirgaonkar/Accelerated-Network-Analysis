@@ -37,7 +37,7 @@ A = zeros(size(fvec));
 
 A(2:end) = fvec(2:end).^(-7/6);
 
-A(end-9:end)
+% A(1:10)
 
 alphaTerm = zeros(size(fvec));
 
@@ -46,13 +46,28 @@ for k = 0:4
 
 end
 
+%Construct the Negative Spectrum
+fneg = fvec(end-1:-1:2);
+
+Aneg = A(end-1:-1:2)*-1;
+
+% Aneg(end-9:end)
+
+alphaTermneg = alphaTerm(end-1:-1:2)*-1;
+
 %Final Phase Term
 
 Psi = 2*pi*t*fvec - phase - pi/4 + alphaTerm;
 
+Psineg = 2*pi*t*fneg - phase - pi/4 - alphaTermneg;
+
 %Final Expression
 
-fwave = A.*exp(-1*1j*Psi);
+fwavepos = A.*exp(-1*1j*Psi);
+% fwaveneg = Aneg.*exp(-1*1i*Psineg);
+fwaveneg = conj(fwavepos(end-1:-1:2));
+
+fwave = [fwavepos, fwaveneg];
 
 
 
