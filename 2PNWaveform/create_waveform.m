@@ -32,7 +32,7 @@ fvec = [fpos, fneg];
 %% Create 2PN Waveform in Fourier Domain
 % fwave = waveform(fvec,ta,phase,fmin,m1,m2);
 % fwave_t = fwave;
-fwave = waveform(fpos,ta,phase,fmin,m1,m2);
+fwave = waveform(fpos,ta,phase,N,fmin,m1,m2);
 % fwaveneg = waveform(fneg,ta,phase,fmin,m1,m2);
 % fwave = [fwavepos, fwaveneg];
 fwave_t = fwave;
