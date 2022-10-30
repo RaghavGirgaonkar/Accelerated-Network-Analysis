@@ -18,28 +18,21 @@ ta = 0;
 phase = 0;
 %% Positive Frequency Vector
 fpos = (0:floor(N/2))*(1/T_sig);
-%% Negative Frequency Vector
-fneg = (N -1 - floor(N/2):-1:1)*(-1/T_sig);
-%% Total Frequency vector
-fvec = [fpos, fneg];
-% min_index  = floor(T_sig*fmin) + 1;
-% max_index = floor(T_sig*fmax) + 1;
-% 
-% fvec(1:min_index-1) = 0;
-% fvec(max_index+1: floor(N/2) + floor(N/2) - max_index + 2) = 0;
-% fvec(floor(N/2) + floor(N/2) - min_index + 3:end) = 0;
-% plot(fvec);
-%% Create 2PN Waveform in Fourier Domain
-% fwave = waveform(fvec,ta,phase,fmin,m1,m2);
-% fwave_t = fwave;
-fwave = waveform(fpos,ta,phase,N,fmin,m1,m2);
-% fwaveneg = waveform(fneg,ta,phase,fmin,m1,m2);
-% fwave = [fwavepos, fwaveneg];
-fwave_t = fwave;
-% plot(abs(fwave));
-% plot(fftshift(abs(fwave)));
 
-plot(real(fwave));
+%% Create 2PN Waveform in Fourier Domain
+
+fwavepos = waveform(fpos,ta,phase,fmin,m1,m2);
+
+if mod(N,2) == 0
+    fwaveneg = conj(fwavepos(end-1:-1:2));
+else
+    fwaveneg = conj(fwavepos(end:-1:2));
+end
+
+fwave = [fwavepos, fwaveneg];
+% fwave_t = fwave;
+% 
+% plot(real(fwave));
 %% Set all indices to zero except for the ones corresponding to [fmin, fmax]
 min_index  = floor(T_sig*fmin) + 1;
 max_index = floor(T_sig*fmax) + 1;

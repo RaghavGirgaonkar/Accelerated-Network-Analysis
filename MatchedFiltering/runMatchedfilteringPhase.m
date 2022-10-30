@@ -29,7 +29,7 @@ q1 = genqc(timeVecSig,A,coeffs,pi/2);
 final_signal_q0 = [q0, zeros(1,(nsamples_tot-nsamples_sig))];
 final_signal_q1 = [q1, zeros(1,(nsamples_tot-nsamples_sig))];
 %Shift the signals forward by t seconds
-t = 10;
+t = 12;
 shifted_signal_q0 = [zeros(1,floor(t*sampling_freq)-1), q0, zeros(1, nsamples_tot - nsamples_sig - floor(t*sampling_freq)+1)];
 shifted_signal_q1 = [zeros(1,floor(t*sampling_freq)-1), q1, zeros(1, nsamples_tot - nsamples_sig - floor(t*sampling_freq)+1)];
 % plot(timeVecTot, shifted_signal);
@@ -55,11 +55,18 @@ total_signal_q1 = shifted_signal_q1 + wgn;
 [ta1, timesVec1] = matchedfiltering(total_signal_q1, final_signal_q1, sampling_freq, psd);
 %Square and Add the two output timeseries
 timesVec = timesVec0.^2 + timesVec1.^2;
+%Plot timesVec
+% plot(timeVecTot, timesVec);
+% title('q_0^2 + q_1^2')
+% xlabel('t_a');
+% ylabel('Likelihood Value');
 %Find SNR
 [max_val, max_sample] = max(timesVec);
 % fprintf('The max value of FINAL t_a is = %f at time = %f\n',max_val,(1/sampling_freq)*max_sample);
 stdv = std(timesVec(1:4*sampling_freq));
-snr = sqrt(max_val/stdv);
+meantime = mean(timesVec(1:4*sampling_freq));
+% snr = sqrt(max_val/stdv);
+snr = sqrt((max_val - meantime)/stdv);
 % fprintf("SNR is %f\n", snr);
 SNRs(i) = snr;
 end

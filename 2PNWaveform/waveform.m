@@ -1,4 +1,4 @@
-function fwave = waveform(fvec, t, phase, N,fmin, m1, m2)
+function fwave = waveform(fvec, t, phase, fmin, m1, m2)
 %Function to create Restricted 2PN Waveform in Fourier Domain
 %Input is total frequency vector
 %Constants
@@ -37,8 +37,6 @@ A = zeros(size(fvec));
 
 A(2:end) = fvec(2:end).^(-7/6);
 
-% A(1:10)
-
 alphaTerm = zeros(size(fvec));
 
 for k = 0:4
@@ -46,32 +44,16 @@ for k = 0:4
 
 end
 
-%Construct the Negative Spectrum
-% fneg = -1*fvec(end-1:-1:2);
-
-% Aneg = A(end-1:-1:2)*-1;
-
-% Aneg(end-9:end)
-
-% alphaTermneg = alphaTerm(end-1:-1:2)*-1;
 
 %Final Phase Term
 
 Psi = 2*pi*t*fvec - phase - pi/4 + alphaTerm;
 
-% Psineg = 2*pi*t*fneg - phase - pi/4 + alphaTermneg;
-
 %Final Expression
 
-fwavepos = A.*exp(-1*1j*Psi);
+fwave = A.*exp(-1*1j*Psi);
 % fwaveneg = Aneg.*exp(-1*1i*Psineg);
-if mod(N,2) == 0
-    fwaveneg = conj(fwavepos(end-1:-1:2));
-else
-    fwaveneg = conj(fwavepos(end:-1:2));
-end
 
-fwave = [fwavepos, fwaveneg];
 
 
 
