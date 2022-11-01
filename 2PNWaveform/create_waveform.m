@@ -21,7 +21,7 @@ fpos = (0:floor(N/2))*(1/T_sig);
 
 %% Create 2PN Waveform in Fourier Domain
 
-fwavepos = waveform(fpos,ta,phase,fmin,m1,m2);
+fwavepos = waveform(fpos,ta,phase,fmin,m1,m2,0);
 
 if mod(N,2) == 0
     fwaveneg = conj(fwavepos(end-1:-1:2));
