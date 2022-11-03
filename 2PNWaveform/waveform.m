@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+function fwave = waveform(fvec, t, phase, fmin, fmax,m1, m2,datalen,initial_phase)
+=======
 function fwave = waveform(fvec, t, phase, fmin, m1, m2,initial_phase)
+>>>>>>> 74659f4875e5bd6e8ff0f2146e390fffa53606dd
 %Function to create Restricted 2PN Waveform in Fourier Domain
 %Input is total frequency vector
 %Constants
@@ -47,11 +51,21 @@ end
 
 %Final Phase Term
 
-Psi = 2*pi*t*fvec - phase - pi/4 + alphaTerm;
+Psi = 2*pi*t*fvec - phase - pi/4 + alphaTerm + initial_phase;
 
 %Final Expression
 
+<<<<<<< HEAD
+fwave = A.*exp(-1*1j*Psi);
+
+min_index  = floor(datalen*fmin) + 1;
+max_index = floor(datalen*fmax) + 1;
+
+fwave(1:min_index-1) = 0;
+fwave(max_index + 1: end) = 0;
+=======
 fwave = A.*exp(-1*1j*Psi + initial_phase);
+>>>>>>> 74659f4875e5bd6e8ff0f2146e390fffa53606dd
 % fwaveneg = Aneg.*exp(-1*1i*Psineg);
 
 
