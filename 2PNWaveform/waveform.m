@@ -48,10 +48,11 @@ end
 %Final Phase Term
 
 Psi = 2*pi*t*fvec - phase - pi/4 + alphaTerm + initial_phase;
+% Psi = 2*pi*t*fvec - phase - pi/4;
 
 %Final Expression
 
-fwave = A.*exp(-1*1j*Psi);
+fwave = A.*exp(-1j*Psi);
 
 min_index  = floor(datalen*fmin) + 1;
 max_index = floor(datalen*fmax) + 1;
