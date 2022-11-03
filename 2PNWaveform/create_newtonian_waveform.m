@@ -1,11 +1,11 @@
 %% Time of Signal based on Chirp Parameter Tau0 for both masses = 1.4 Solar Masses
-% T_sig = Tau0 (in this case 54 seconds)
-T_sig = 54;
+% T_sig = Tau0 (in this case 25 seconds)
+T_sig = 25;
 initial_phase = 0;
 %% Sampling Frequency
 Fs = 2048;
 %% Number of samples = num*Fs*T_sig
-num = 3;
+num = 5;
 N = floor(num*T_sig*Fs);
 timeVec = (0:N-1)*(1/Fs);
 %% Min and Max Frequencies Hz
@@ -15,7 +15,7 @@ fmax = 700;
 m1 = 1.4;
 m2 = 1.4;
 %% Initial Time of Arrival and Phase 
-ta = 80;
+ta = 5;
 phase = 0;
 %% Positive Frequency Vector
 datalen = N/Fs;
@@ -23,7 +23,7 @@ fpos = (0:floor(N/2))*(1/datalen);
 
 %% Create 2PN Waveform in Fourier Domain
 
-fwavepos = waveform(fpos,ta,phase,fmin,fmax,m1,m2,datalen,initial_phase);
+fwavepos = newtonian_waveform(fpos,ta,phase,fmin,fmax,m1,m2,datalen,initial_phase);
 
 if mod(N,2) == 0
     fwaveneg = conj(fwavepos(end-1:-1:2));
@@ -48,7 +48,7 @@ wave = ifft(fwave);
 %% Plots
 plot(timeVec,wave);
 xlabel("Seconds");
-title("2PN Waveform 30-700Hz")
+title("Newtonian Waveform 30-700Hz")
 % hold on;
 % plot(timeVec,imag(wave));
 %plot(fvec, fwave);

@@ -39,20 +39,27 @@ A(2:end) = fvec(2:end).^(-7/6);
 
 alphaTerm = zeros(size(fvec));
 
-for k = 0:4
-    alphaTerm(2:end) = alphaTerm(2:end) + alpha(k+1)*(fvec(2:end)./fmin).^((-5+k)/3);
+% for k = 0:4
+%     alphaTerm(2:end) = alphaTerm(2:end) + alpha(k+1)*(fvec(2:end)./fmin).^((-5+k)/3);
+% 
+% end
 
-end
+alphaTerm(2:end) = alpha0*((fvec(2:end)./fmin).^(-5/3)) + alpha1*((fvec(2:end)./fmin).^(-4/3)) + alpha2*((fvec(2:end)./fmin).^(-3/3)) + alpha3*((fvec(2:end)./fmin).^(-2/3)) + alpha4*((fvec(2:end)./fmin).^(-1/3));
+% alphaTerm(2:end) = alphaTerm(2:end) + alpha1*((fvec(2:end)./fmin).^(-4/3));
+% alphaTerm(2:end) = alphaTerm(2:end) + alpha2*((fvec(2:end)./fmin).^(-3/3));
+% alphaTerm(2:end) = alphaTerm(2:end) + alpha3*((fvec(2:end)./fmin).^(-2/3));
+% alphaTerm(2:end) = alphaTerm(2:end) + alpha4*((fvec(2:end)./fmin).^(-1/3));
 
 
 %Final Phase Term
 
-Psi = 2*pi*t*fvec - phase - pi/4 + alphaTerm + initial_phase;
+Psi = -2*pi*t*fvec + phase + pi/4 - alphaTerm + initial_phase;
 % Psi = 2*pi*t*fvec - phase - pi/4;
 
 %Final Expression
 
-fwave = A.*exp(-1j*Psi);
+fwave = A.*exp(1j*Psi);
+% fwave = A;
 
 min_index  = floor(datalen*fmin) + 1;
 max_index = floor(datalen*fmax) + 1;
