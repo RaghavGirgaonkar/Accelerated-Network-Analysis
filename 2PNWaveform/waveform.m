@@ -58,8 +58,6 @@ max_index = floor(datalen*fmax) + 1;
 
 fwave(1:min_index-1) = 0;
 fwave(max_index + 1: end) = 0;
-=======
-fwave = A.*exp(-1*1j*Psi);
 % fwaveneg = Aneg.*exp(-1*1i*Psineg);
 
 
