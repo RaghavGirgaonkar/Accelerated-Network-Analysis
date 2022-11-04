@@ -15,7 +15,7 @@ fmax = 700;
 m1 = 1.4;
 m2 = 1.4;
 %% Initial Time of Arrival and Phase 
-ta = 80;
+ta = 0;
 phase = 0;
 %% Positive Frequency Vector
 datalen = N/Fs;

@@ -1,5 +1,4 @@
 function fwave = newtonian_waveform(fvec, t, phase, fmin, fmax,m1, m2,datalen,initial_phase)
-%Function to create Restricted 2PN Waveform in Fourier Domain
 %Input is total frequency vector
 %Constants
 c = 3*10^8;
@@ -65,8 +64,8 @@ Psi = -2*pi*t*fvec + phase + pi/4 + 2*pi*fmin*zi*alphaTerm + initial_phase;
 
 %Final Expression
 
-% fwave = A.*exp(1j*Psi);
-fwave = A;
+fwave = A.*exp(1j*Psi);
+% fwave = A;
 
 min_index  = floor(datalen*fmin) + 1;
 max_index = floor(datalen*fmax) + 1;
