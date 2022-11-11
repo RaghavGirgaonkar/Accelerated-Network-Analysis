@@ -87,10 +87,10 @@ for lpruns = 1:nRuns
     outResults.allRunsOutput(lpruns).estTa = estTa;
     m1 = qcCoefs(1);
     m2 = qcCoefs(2);
-    q0 = gen2PNwaveform(params.fpos, params.ta, params.phase, params.frange(1), params.frange(2), m1,...
+    q0 = gen2PNwaveform(params.fpos, 0, 0, params.frange(1), params.frange(2), m1,...
     m2,params.datalen,0,1,params.N);
-    q1 = gen2PNwaveform(params.fpos, params.ta, params.phase, params.frange(1), params.frange(2), m1,...
-    m2,params.datalen,pi/2,1,params.N);
+    q1 = gen2PNwaveform(params.fpos, 0, pi/2, params.frange(1), params.frange(2), m1,...
+    m2,params.datalen,0,1,params.N);
     
 %     sizeq0 = size(estSigq0_shifted)
     %Estimated Phase
@@ -105,8 +105,8 @@ for lpruns = 1:nRuns
     outResults.allRunsOutput(lpruns).estAmp = estAmp;
     %Estimated Signal
 %     estSigTemp = genqc(timeVecSig,1,qcCoefs,estPhase);
-    estSigTemp = gen2PNwaveform(params.fpos, estTa, params.phase, params.frange(1), params.frange(2), m1,...
-    m2,params.datalen,estPhase,estAmp,params.N);
+    estSigTemp = gen2PNwaveform(params.fpos, estTa, estPhase, params.frange(1), params.frange(2), m1,...
+    m2,params.datalen,0,estAmp,params.N);
 %     estSigTemp_shifted = [zeros(1,floor(estTa*sampling_freq)-1), estSigTemp, zeros(1, nSamples - nSamplesSig - floor(estTa*sampling_freq)+1)];
     estSig = estAmp*estSigTemp;
     outResults.allRunsOutput(lpruns).estSig = estSig;

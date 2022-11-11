@@ -38,8 +38,8 @@ m1 = x(1);
 m2 = x(2);
 q0 = gen2PNwaveform(params.fpos, 0, 0, params.frange(1), params.frange(2), m1,...
     m2,params.datalen,0,1,params.N);
-q1 = gen2PNwaveform(params.fpos, 0, 0, params.frange(1), params.frange(2), m1,...
-    m2,params.datalen,pi/2,1,params.N);
+q1 = gen2PNwaveform(params.fpos, 0, pi/2, params.frange(1), params.frange(2), m1,...
+    m2,params.datalen,0,1,params.N);
 
 
 %Compute fitness value after maximizing by matched filtering

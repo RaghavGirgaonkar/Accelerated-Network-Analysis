@@ -14,8 +14,8 @@ fmax = 700;
 %% Positive Frequency Vector
 datalen = N/Fs;
 fpos = (0:floor(N/2))*(1/datalen);
-%% Initial Time of Arrival and Phase 
-ta = 0;
+%% Initial Time of Arrival and Coalescence Phase 
+ta = -80;
 phase = 0;
 % Signal to noise ratio of the true signal
 snr = 10;
@@ -27,20 +27,14 @@ coeffs = [m1,m2];
 rmin = [1, 1];
 rmax = [10, 10];
 % Number of independent PSO runs
-nRuns = 2;
+nRuns = 8;
 %% Do not change below
 % Generate data realization
 % dataX = (0:(nSamples-1))/Fs;
 % Reset random number generator to generate the same noise realization,
 % otherwise comment this line out
 % rng('default');
-% N = 10;
-% a1_errors = zeros(1,N);
-% a2_errors = zeros(1,N);
-% a3_errors = zeros(1,N);
-% A_errors = zeros(1,N);
-% phi_errors = zeros(1,N);
-% ta_errors = zeros(1,N);
+
 % Generate 2PN signal
 wave = gen2PNwaveform(fpos, ta, phase, fmin, fmax, m1,m2,datalen, initial_phase, snr, N);
 %Generate Final Signal
@@ -55,79 +49,14 @@ inParams = struct('dataX', dataX,...
                   'frange', [fmin,fmax],...
                   'datalen',datalen,...,
                   'initial_phase', initial_phase,...
-                  'snr', snr,...
                   'N', N,...
                   'rmin',rmin,...
                   'rmax',rmax);
 % CRCBQCHRPPSO runs PSO on the PSOFITFUNC fitness function. As an
 % illustration of usage, we change one of the PSO parameters from its
 % default value.
-outStruct = crcbqcpso(inParams,struct('maxSteps',2000),nRuns,Fs);
-% a1_errors(i) = outStruct.bestQcCoefs(1) - a1;
-% a2_errors(i) = outStruct.bestQcCoefs(2) - a2;
-% a3_errors(i) = outStruct.bestQcCoefs(3) - a3;
-% A_errors(i) = outStruct.bestAmp - snr;
-% phi_errors(i) = outStruct.bestPhase - pi/4;
-% ta_errors(i) = outStruct.bestTime - t;
-% end
-%%Plots
-% figure;
-% plot(a1_errors);
-% title('Estimated Errors for a1');
-% ylabel('a1_estimated - a1_actual');
-% 
-% figure;
-% plot(a2_errors);
-% title('Estimated Errors for a2');
-% ylabel('a2_estimated - a2_actual');
-% 
-% figure;
-% plot(a3_errors);
-% title('Estimated Errors for a1');
-% ylabel('a3_estimated - a3_actual');
-% 
-% figure;
-% plot(A_errors);
-% title('Estimated Errors for A');
-% ylabel('A_estimated - A_actual');
-% 
-% figure;
-% plot(phi_errors);
-% title('Estimated Errors for phi');
-% ylabel('phi_estimated - phi_actual');
-% 
-% figure;
-% plot(ta_errors);
-% title('Estimated Errors for t_a');
-% ylabel('ta_estimated - ta_actual');
-% 
-% 
-% %%Histograms
-% figure;
-% histogram(a1_errors, 50);
-% title('Histogram for Errors of a1');
-% 
-% figure;
-% histogram(a2_errors, 50);
-% title('Histogram for Errors of a2');
-% 
-% 
-% figure;
-% histogram(a3_errors, 50);
-% title('Histogram for Errors of a3');
-% 
-% figure;
-% histogram(A_errors, 50);
-% title('Histogram for Errors of A');
-% 
-% figure;
-% histogram(phi_errors, 50);
-% title('Histogram for Errors of phi');
-% 
-% figure;
-% histogram(ta_errors, 50);
-% title('Histogram for Errors of ta');
-%%
+outStruct = crcbqcpso(inParams,struct('maxSteps',1000),nRuns,Fs);
+
 % Plots
 figure;
 hold on;
