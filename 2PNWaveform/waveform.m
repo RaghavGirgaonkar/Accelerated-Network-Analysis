@@ -31,7 +31,7 @@ alpha3 = -2*pi*fmin*(3*tau1p5/2);
 
 alpha4 = 2*pi*fmin*3*tau2;
 
-alpha = [alpha0, alpha1, alpha2, alpha3, alpha4];
+% alpha = [alpha0, alpha1, alpha2, alpha3, alpha4];
 
 A = zeros(size(fvec));
 
@@ -49,12 +49,6 @@ alphaTerm(2:end) = alpha0*((fvec(2:end)./fmin).^(-5/3))...
 + alpha2*((fvec(2:end)./fmin).^(-3/3))... 
 + alpha3*((fvec(2:end)./fmin).^(-2/3))... 
 + alpha4*((fvec(2:end)./fmin).^(-1/3));
-
-
-% alphaTerm(2:end) = alphaTerm(2:end) + alpha1*((fvec(2:end)./fmin).^(-4/3));
-% alphaTerm(2:end) = alphaTerm(2:end) + alpha2*((fvec(2:end)./fmin).^(-3/3));
-% alphaTerm(2:end) = alphaTerm(2:end) + alpha3*((fvec(2:end)./fmin).^(-2/3));
-% alphaTerm(2:end) = alphaTerm(2:end) + alpha4*((fvec(2:end)./fmin).^(-1/3));
 
 
 %Final Phase Term

@@ -27,7 +27,7 @@ coeffs = [m1,m2];
 rmin = [1, 1];
 rmax = [10, 10];
 % Number of independent PSO runs
-nRuns = 8;
+nRuns = 5;
 %% Do not change below
 % Generate data realization
 % dataX = (0:(nSamples-1))/Fs;
