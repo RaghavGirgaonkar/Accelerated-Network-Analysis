@@ -7,8 +7,7 @@ function timesVec = matchedfiltering(y,q)
 
 
 
-Y = fft(y);
-Z = Y;
+Z = fft(y);
 Q = fft(q);
 
 

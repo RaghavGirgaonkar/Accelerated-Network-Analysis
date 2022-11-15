@@ -10,9 +10,8 @@ end
 
 fwave = [fwavepos, fwaveneg];
 
-
 wave = ifft(fwave);
 
-wave = snr*wave./norm(wave);
+wave = snr*wave/norm(wave);
 
 
