@@ -62,7 +62,8 @@ for lpruns = 1:nRuns
 end
 %Independent runs of PSO in parallel. Change 'parfor' to 'for' if the
 %parallel computing toolbox is not available.
-fprintf("Running PSO");
+fprintf("Running PSO\n");
+parpool(nruns);
 parfor lpruns = 1:nRuns
     %Reset random number generator for each worker
     rng(lpruns);
