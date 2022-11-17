@@ -54,7 +54,8 @@ inParams = struct('dataX', dataX,...
 % CRCBQCHRPPSO runs PSO on the PSOFITFUNC fitness function. As an
 % illustration of usage, we change one of the PSO parameters from its
 % default value.
-outStruct = crcbqcpso(inParams,struct('maxSteps',1000),nRuns,Fs);
+maxSteps = 10;
+outStruct = crcbqcpso(inParams,struct('maxSteps',maxSteps),nRuns,Fs);
 
 save('/scratch/09197/raghav/outStruct.mat','outStruct');
 
@@ -73,6 +74,37 @@ plot(dataX,outStruct.bestSig,'Color',[76,153,0]/255,'LineWidth',2.0);
 legend('Data','Signal',...
         'Estimated signal: Best run');
 saveas(gcf,"/scratch/09197/raghav/psoresults.pdf");
+hold off;
+
+figure;
+iterVec = linspace(1,maxSteps,maxSteps);
+hold on;
+for lpruns = 1:nRuns
+      plot(iterVec,outStruct.allRunsOutput(lpruns).allBestFit, 'DisplayName',num2str(lpruns));
+end
+title("Best Fitness Values for All Runs");
+xlabel("Iteration");
+ylabel("Best Fitness Value");
+legend;
+saveas(gcf,"/scratch/09197/raghav/bestfitness.pdf");
+hold off;
+
+figure;
+hold on;
+for lpruns = 1:nRuns
+      rVec = s2rv(outStruct.allRunsOutput(lpruns).allBestLoc,inParams);
+      plot(rVec(:,1),rVec(:,2),'DisplayName',num2str(lpruns));
+end
+scatter(m1,m2,140,'red','filled','D','DisplayName','Original Parameters');
+title("Best Parameter Values for All Runs");
+xlabel("m_1");
+ylabel("m_2");
+legend;
+saveas(gcf,"/scratch/09197/raghav/bestloc.pdf");
+hold off;
+
+
+
 disp(['Estimated parameters: m1=',num2str(outStruct.bestQcCoefs(1)),...
                               '; m2=',num2str(outStruct.bestQcCoefs(2)),...
                               '; A = ',num2str(outStruct.bestAmp),...
