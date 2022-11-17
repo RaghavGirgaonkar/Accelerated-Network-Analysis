@@ -2,9 +2,9 @@
 #----------------------------------------------------
 # Sample Slurm job script
 
-#SBATCH -J gwpso           # Job name
-#SBATCH -o $SCRATCH/gwpso.o%j       # Name of stdout output file
-#SBATCH -e $SCRATCH/gwpso.e%j       # Name of stderr error file
+#SBATCH -J rungwpso           # Job name
+#SBATCH -o /scratch/09197/raghav/rungwpso.o%j       # Name of stdout output file
+#SBATCH -e /scratch/09197/raghav/rungwpso.e%j       # Name of stderr error file
 #SBATCH -p normal          # Queue (partition) name
 #SBATCH -N 1               # Total # of nodes (must be 1 for serial)
 #SBATCH -n 1               # Total # of mpi tasks (should be 1 for serial)
@@ -15,5 +15,4 @@
 
 
 module load matlab
-matlab -batch  "cd /work/09197/raghav/ls6/Accelerated-Network-Analysis/2PNWaveform;rungwpso" 
-
+matlab -batch  "cd /work/09197/raghav/ls6/Accelerated-Network-Analysis/2PNWaveform; rungwpso"

@@ -67,7 +67,7 @@ end
 parfor lpruns = 1:nRuns
     %Reset random number generator for each worker
     rng(lpruns);
-    outStruct(lpruns)=crcbpso(fHandle,nDim,psoParams);
+    outStruct(lpruns)=crcbpso(fHandle,nDim,psoParams,2);
 end
 
 %Prepare output
