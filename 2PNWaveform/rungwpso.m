@@ -27,7 +27,7 @@ m2 = 1.4;
 rmin = [1.2, 1.2];
 rmax = [10, 10];
 % Number of independent PSO runs
-nRuns = 2;
+nRuns = 8;
 %% Do not change below
 % Generate data realization
 % dataX = (0:(nSamples-1))/Fs;
@@ -54,23 +54,25 @@ inParams = struct('dataX', dataX,...
 % CRCBQCHRPPSO runs PSO on the PSOFITFUNC fitness function. As an
 % illustration of usage, we change one of the PSO parameters from its
 % default value.
-outStruct = crcbqcpso(inParams,struct('maxSteps',100),nRuns,Fs);
+outStruct = crcbqcpso(inParams,struct('maxSteps',1000),nRuns,Fs);
+
+save('outStruct.mat','outStruct');
 
 % Plots
 figure;
 hold on;
 plot(dataX,dataY,'.');
 plot(dataX,wave,'r');
-for lpruns = 1:nRuns
-      plot(dataX,outStruct.allRunsOutput(lpruns).estSig,'Color',[51,255,153]/255,'LineWidth',4.0);
-end
+% for lpruns = 1:nRuns
+%       plot(dataX,outStruct.allRunsOutput(lpruns).estSig,'Color',[51,255,153]/255,'LineWidth',4.0);
+% end
 plot(dataX,outStruct.bestSig,'Color',[76,153,0]/255,'LineWidth',2.0);
-legend('Data','Signal',...
-        ['Estimated signal: ',num2str(nRuns),' runs'],...
-        'Estimated signal: Best run');
-saveas(gcf,"$SCRATCH/psoresults.pdf");
 % legend('Data','Signal',...
-%        'Estimated signal: Best run');
+%         ['Estimated signal: ',num2str(nRuns),' runs'],...
+%         'Estimated signal: Best run');
+legend('Data','Signal',...
+        'Estimated signal: Best run');
+saveas(gcf,"/scratch/09197/raghav/psoresults.pdf");
 disp(['Estimated parameters: m1=',num2str(outStruct.bestQcCoefs(1)),...
                               '; m2=',num2str(outStruct.bestQcCoefs(2)),...
                               '; A = ',num2str(outStruct.bestAmp),...
