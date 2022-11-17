@@ -56,7 +56,7 @@ inParams = struct('dataX', dataX,...
 % default value.
 outStruct = crcbqcpso(inParams,struct('maxSteps',1000),nRuns,Fs);
 
-save('outStruct.mat','outStruct');
+save('/scratch/09197/raghav/outStruct.mat','outStruct');
 
 % Plots
 figure;
