@@ -54,7 +54,7 @@ inParams = struct('dataX', dataX,...
 % CRCBQCHRPPSO runs PSO on the PSOFITFUNC fitness function. As an
 % illustration of usage, we change one of the PSO parameters from its
 % default value.
-maxSteps = 10;
+maxSteps = 1000;
 outStruct = crcbqcpso(inParams,struct('maxSteps',maxSteps),nRuns,Fs);
 
 save('/scratch/09197/raghav/outStruct.mat','outStruct');
