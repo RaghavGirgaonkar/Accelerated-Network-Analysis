@@ -38,7 +38,7 @@ if params.pso.type == "tau"
     u = m1*m2/(m1 + m2);
     n = u/M;
     tau0 = (5/(256*pi))*(1/fmin)*((G*M*pi*fmin/c^3)^(-5/3))*(1/n);
-    tau1p5 = (5/(192*pi))*(1/fmin)*((G*M*pi*fmin/c^3)^(-1))*(1/n)*((743/336)+ (11*n/4));
+    tau1p5 = (1/8)*(1/fmin)*((G*M*pi*fmin/c^3)^(-2/3))*(1/n);
     type = 1;
     disp("Tau Space PSO");
 else

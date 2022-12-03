@@ -1,4 +1,4 @@
-function boundary_fig = plots
+function boundary_fig = boundary_plot
 
 %% Plots in the m1, m2 space and the Tau1.5 and Tau0 space
 

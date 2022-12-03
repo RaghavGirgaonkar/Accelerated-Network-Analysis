@@ -15,13 +15,13 @@ fmax = 700;
 datalen = N/Fs;
 fpos = (0:floor(N/2))*(1/datalen);
 %% Initial Time of Arrival and Coalescence Phase 
-ta = 82;
+ta = 50;
 phase = 0;
 % Signal to noise ratio of the true signal
 snr = 10;
 % Phase coefficients parameters of the true signal
-m1 = 1.4;
-m2 = 1.4;
+m1 = 3;
+m2 = 4;
 % coeffs = [m1,m2];
 % Search range of phase coefficients
 rmin = [1.2, 1.2];
@@ -54,7 +54,7 @@ inParams = struct('dataX', dataX,...
 % CRCBQCHRPPSO runs PSO on the PSOFITFUNC fitness function. As an
 % illustration of usage, we change one of the PSO parameters from its
 % default value.
-maxSteps = 1000;
+maxSteps = 10;
 outStruct = crcbqcpso(inParams,struct('maxSteps',maxSteps),nRuns,Fs);
 
 save('/scratch/09197/raghav/outStruct.mat','outStruct');
