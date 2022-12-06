@@ -1,4 +1,4 @@
-function outResults = crcbqcpso(inParams,psoParams,nRuns, sampling_freq)
+function outResults = crcbqcpso_tau(inParams,psoParams,nRuns, sampling_freq)
 %Regression of quadratic chirp using PSO
 %O = CRCBQCPPSO(I,P,N)
 %I is the input struct with the fields given below.  P is the PSO parameter
@@ -31,7 +31,7 @@ nSamples = length(inParams.dataX);
 
 % nSamplesSig = sampling_freq*T_sig;
 
-fHandle = @(x) psofitfunc(x,inParams);
+fHandle = @(x) psofitfunc_tau(x,inParams);
 
 params = inParams;
 
@@ -92,12 +92,12 @@ for lpruns = 1:nRuns
     estTa = ta_index/sampling_freq;
     
     outResults.allRunsOutput(lpruns).estTa = estTa;
-    m1 = qcCoefs(1);
-    m2 = qcCoefs(2);
-    q0 = gen2PNwaveform(params.fpos, estTa, 0, params.frange(1), params.frange(2), m1,...
-    m2,params.datalen,0,1,params.N);
-    q1 = gen2PNwaveform(params.fpos, estTa, pi/2, params.frange(1), params.frange(2), m1,...
-    m2,params.datalen,0,1,params.N);
+    tau0 = qcCoefs(1);
+    tau1p5 = qcCoefs(2);
+    q0 = gen2PNwaveform_tau(params.fpos, estTa, 0, params.frange(1), params.frange(2), tau0,...
+    tau1p5,params.datalen,0,1,params.N);
+    q1 = gen2PNwaveform_tau(params.fpos, estTa, pi/2, params.frange(1), params.frange(2), tau0,...
+    tau1p5,params.datalen,0,1,params.N);
     
 %     sizeq0 = size(estSigq0_shifted)
     %Estimated Phase
@@ -112,8 +112,8 @@ for lpruns = 1:nRuns
     outResults.allRunsOutput(lpruns).estAmp = estAmp;
     %Estimated Signal
 %     estSigTemp = genqc(timeVecSig,1,qcCoefs,estPhase);
-    estSig = gen2PNwaveform(params.fpos, estTa, estPhase, params.frange(1), params.frange(2), m1,...
-    m2,params.datalen,0,estAmp,params.N);
+    estSig = gen2PNwaveform_tau(params.fpos, estTa, estPhase, params.frange(1), params.frange(2), tau0,...
+    tau1p5,params.datalen,0,estAmp,params.N);
 %     estSigTemp_shifted = [zeros(1,floor(estTa*sampling_freq)-1), estSigTemp, zeros(1, nSamples - nSamplesSig - floor(estTa*sampling_freq)+1)];
 %     estSig = estAmp*estSigTemp;
     outResults.allRunsOutput(lpruns).estSig = estSig;

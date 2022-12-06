@@ -63,11 +63,12 @@ ngridpoints = 2000;
 tau0_lin = linspace(0.1, 70, ngridpoints);
 tau1p5_lin = linspace(0.1, 2, ngridpoints);
 
-nsectors = 4;
+nsectors = 2;
 nindex = ngridpoints/nsectors;
 
 fitvals = zeros(nindex);
 
+rng('default');
 wgn = randn(1, N);
 
 dataX = timeVec;
