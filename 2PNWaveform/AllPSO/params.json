@@ -9,6 +9,8 @@
 "rmin_tau": [0, 0],
 "rmax_tau": [90, 2],
 "freq": [30, 700],
+"startidx_tau0": 1,
+"startidx_tau1p5": 501,
 "signal": {
 "T_sig": 54,
 "num": 3
@@ -18,7 +20,8 @@
     "bestlocplot": "/scratch/09197/raghav/bestloc_tau.png",
     "bestfitplot": "/scratch/09197/raghav/bestfitness_tau.png",
     "psoresultplot": "/scratch/09197/raghav/psoresults_tau.png",
-    "fitnessvaluesfile": "/scratch/09197/raghav/fitness_values.txt"
+    "fitnessvaluesfile": "/scratch/09197/raghav/fitness_values.txt",
+    "fitvalimgfile": "1to500.txt"
 },
 "pso": {
     "type": "tau",
