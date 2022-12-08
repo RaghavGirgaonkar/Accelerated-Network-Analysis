@@ -73,16 +73,9 @@ wgn = randn(1, N);
 
 dataX = timeVec;
 
-startidx_tau0 = params.startidx_tau0;
-startidx_tau1p5 = params.startidx_tau1p5;
-
-parfor i = startidx_tau0:startidx_tau0+nindex-1
-    
-    for j = 1:nindex
-
-     wave = gen2PNwaveform_tau(fpos, ta, phase, fmin, fmax,tau0_lin(i),tau1p5_lin(startidx_tau1p5+j-1),datalen, initial_phase, snr, N);
-     dataY = wave + wgn;
-     inParams = struct('dataX', dataX,...
+wave = gen2PNwaveform_tau(fpos, ta, phase, fmin, fmax,tau0,tau1p5,datalen, initial_phase, snr, N);
+dataY = wave + wgn;
+inParams = struct('dataX', dataX,...
                           'fpos', fpos,...
                           'dataY', dataY,...
                           'frange', [fmin,fmax],...
@@ -91,9 +84,15 @@ parfor i = startidx_tau0:startidx_tau0+nindex-1
                           'N', N,...
                           'rmin',rmin,...
                           'rmax',rmax);
-    
 
-     fitvals(i,j) = -1*mfqc_tau([tau0_lin(i), tau1p5_lin(j)], inParams);
+startidx_tau0 = params.startidx_tau0;
+startidx_tau1p5 = params.startidx_tau1p5;
+
+parfor i = 1:nindex
+    
+    for j = 1:nindex
+
+         fitvals(i,j) = -1*mfqc_tau([tau0_lin(startidx_tau0+i-1), tau1p5_lin(startidx_tau1p5+j-1)], inParams);
     end
      
 
