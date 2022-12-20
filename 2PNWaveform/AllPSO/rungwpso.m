@@ -2,7 +2,16 @@ function []=rungwpso(filename)
 %% Read JSON File 
 fname = filename;
 str = fileread(fname);
+filenames = jsondecode(str);
+fname = filenames.signalparamfile;
+str = fileread(fname);
 params = jsondecode(str);
+fname = filenames.psoparamfile;
+str = fileread(fname);
+pso = jsondecode(str);
+fname = filenames.filenames;
+str = fileread(fname);
+files = jsondecode(str);
 %Specify initial parameters
 T_sig = params.signal.T_sig;
 initial_phase = 0;
@@ -31,7 +40,7 @@ G = 6.6743*10^-11;
 m1 = params.masses(1);
 m2 = params.masses(2);
 %Tau coeffs as phase parameters
-if params.pso.type == "tau"
+if pso.type == "tau"
     m1 = m1*Msolar;
     m2 = m2*Msolar;
     M = m1 + m2;
@@ -54,9 +63,10 @@ else
     rmax = [params.rmax(1), params.rmax(2)];
 end
 % Number of independent PSO runs
-nRuns = params.pso.nruns;
+nRuns = pso.nruns;
 %% Do not change below
 % Generate data realization
+% wgn = 
 % dataX = (0:(nSamples-1))/Fs;
 % Reset random number generator to generate the same noise realization,
 % otherwise comment this line out
@@ -68,9 +78,10 @@ if type
 else
     wave = gen2PNwaveform(fpos, ta, phase, fmin, fmax, m1,m2,datalen, initial_phase, snr, N);
 end
+plot(timeVec, wave);
 %Generate Final Signal
-wgn = randn(1, N);
-dataY = wave + wgn;
+noise = load("noise_realizations.mat");
+dataY = wave + noise.wgn(params.signal.noise,1:end);
 dataX = timeVec;
 % Input parameters for CRCBQCHRPPSO
 inParams = struct('dataX', dataX,...
@@ -85,7 +96,7 @@ inParams = struct('dataX', dataX,...
 % CRCBQCHRPPSO runs PSO on the PSOFITFUNC fitness function. As an
 % illustration of usage, we change one of the PSO parameters from its
 % default value.
-maxSteps = params.pso.maxSteps;
+maxSteps = pso.maxSteps;
 if type
     original_fitVal = -1*mfqc_tau([tau0, tau1p5], inParams);
     outStruct = crcbqcpso_tau(inParams,struct('maxSteps',maxSteps),nRuns,Fs);
@@ -111,7 +122,7 @@ plot(dataX,outStruct.bestSig,'Color',[76,153,0]/255,'LineWidth',2.0);
 %         'Estimated signal: Best run');
 legend('Data','Signal',...
         'Estimated signal: Best run');
-saveas(gcf,params.files.psoresultplot);
+saveas(gcf,files.psoresultplot);
 hold off;
 
 figure;
@@ -124,7 +135,7 @@ title("Best Fitness Values for All Runs");
 xlabel("Iteration");
 ylabel("Best Fitness Value");
 legend;
-saveas(gcf,params.files.bestfitplot);
+saveas(gcf,files.bestfitplot);
 hold off;
 
 if type
@@ -140,7 +151,7 @@ if type
     ylabel("\tau_{1.5}");
     legend;
     boundary_fig = boundary_plot;
-    saveas(gcf,params.files.bestlocplot);
+    saveas(gcf,files.bestlocplot);
     hold off;
 
     
@@ -201,9 +212,9 @@ else
                               '; FitVal = ',num2str(bestFitVal)]);
 end
 
-fitnessVals = [original_fitVal, bestFitVal];
-fileID = fopen(params.files.fitnessvaluesfile,'a');
-fprintf(fileID,'%f %f\n',fitnessVals);
-fclose(fileID);
+% fitnessVals = [original_fitVal, bestFitVal];
+% fileID = fopen(params.files.fitnessvaluesfile,'a');
+% fprintf(fileID,'%f %f\n',fitnessVals);
+% fclose(fileID);
 
 end
