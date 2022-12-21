@@ -1,0 +1,25 @@
+{
+"sampling_freq": 2048,
+"ta": 40,
+"snr": 10,
+"phase": 0,
+"masses": [1.4, 1.4],
+"rmin": [1, 1],
+"rmax": [30, 30],
+"rmin_tau": [0, 0],
+"rmax_tau": [90, 2],
+"freq": [30, 700],
+"fitnessimage": {
+"startidx_tau0": 1,
+"startidx_tau1p5": 1,
+"ngridpoints": 20,
+"nsectors": 4,
+"tau0_range": [0.1, 70],
+"tau1p5_range": [0.1, 2]
+},
+"signal": {
+"T_sig": 54,
+"num": 3,
+"noise": 1
+}
+}

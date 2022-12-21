@@ -3,7 +3,16 @@ function []=fitValimg(filename)
 %% Read JSON File 
 fname = filename;
 str = fileread(fname);
+filenames = jsondecode(str);
+fname = filenames.signalparamfile;
+str = fileread(fname);
 params = jsondecode(str);
+fname = filenames.psoparamfile;
+str = fileread(fname);
+pso = jsondecode(str);
+fname = filenames.filenames;
+str = fileread(fname);
+files = jsondecode(str);
 %Specify initial parameters
 T_sig = params.signal.T_sig;
 initial_phase = 0;
@@ -32,44 +41,45 @@ G = 6.6743*10^-11;
 m1 = params.masses(1);
 m2 = params.masses(2);
 %Tau coeffs as phase parameters
- if params.pso.type == "tau"
-     m1 = m1*Msolar;
-     m2 = m2*Msolar;
-     M = m1 + m2;
-     u = m1*m2/(m1 + m2);
-     n = u/M;
-     tau0 = (5/(256*pi))*(1/fmin)*((G*M*pi*fmin/c^3)^(-5/3))*(1/n);
-     tau1p5 = (1/8)*(1/fmin)*((G*M*pi*fmin/c^3)^(-2/3))*(1/n);
-     type = 1;
-     disp("Tau Space PSO");
- else
-     type = 0;
-     disp("Mass Space PSO");
- end
- %Search range of phase coefficients
- if type
-     rmin = [params.rmin_tau(1), params.rmin_tau(2)];
-     rmax = [params.rmax_tau(1), params.rmax_tau(2)];
- else
-     rmin = [params.rmin(1), params.rmin(2)];
-     rmax = [params.rmax(1), params.rmax(2)];
+if pso.type == "tau"
+    m1 = m1*Msolar;
+    m2 = m2*Msolar;
+    M = m1 + m2;
+    u = m1*m2/(m1 + m2);
+    n = u/M;
+    tau0 = (5/(256*pi))*(1/fmin)*((G*M*pi*fmin/c^3)^(-5/3))*(1/n);
+    tau1p5 = (1/8)*(1/fmin)*((G*M*pi*fmin/c^3)^(-2/3))*(1/n);
+    type = 1;
+    disp("Tau Space PSO");
+else
+    type = 0;
+    disp("Mass Space PSO");
+end
+% Search range of phase coefficients
+if type
+    rmin = [params.rmin_tau(1), params.rmin_tau(2)];
+    rmax = [params.rmax_tau(1), params.rmax_tau(2)];
+else
+    rmin = [params.rmin(1), params.rmin(2)];
+    rmax = [params.rmax(1), params.rmax(2)];
 end
 
 
 
 %% Grid for the Image
-ngridpoints = 2000;
+ngridpoints = params.fitnessimage.ngridpoints;
 
-tau0_lin = linspace(0.1, 70, ngridpoints);
-tau1p5_lin = linspace(0.1, 2, ngridpoints);
+tau0_lin = linspace(params.fitnessimage.tau0_range(1), params.fitnessimage.tau0_range(2), ngridpoints);
+tau1p5_lin = linspace(params.fitnessimage.tau1p5_range(1), params.fitnessimage.tau1p5_range(2), ngridpoints);
 
-nsectors = 2;
+nsectors = params.fitnessimage.nsectors;
 nindex = ngridpoints/nsectors;
 
 fitvals = zeros(nindex);
 
-rng('default');
-wgn = randn(1, N);
+% rng('default');
+noise = load("noise_realizations.mat");
+wgn = noise.wgn(params.signal.noise,1:end);
 
 dataX = timeVec;
 
@@ -85,8 +95,8 @@ inParams = struct('dataX', dataX,...
                           'rmin',rmin,...
                           'rmax',rmax);
 
-startidx_tau0 = params.startidx_tau0;
-startidx_tau1p5 = params.startidx_tau1p5;
+startidx_tau0 = params.fitnessimage.startidx_tau0;
+startidx_tau1p5 = params.fitnessimage.startidx_tau1p5;
 
 parfor i = 1:nindex
     
@@ -98,7 +108,7 @@ parfor i = 1:nindex
 
 end
 
-writematrix(fitvals, params.files.fitvalimgfile);
+save(files.fitvalimgfile,"fitvals");
 
 
 

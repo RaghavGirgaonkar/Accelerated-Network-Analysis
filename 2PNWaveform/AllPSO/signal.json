@@ -9,8 +9,14 @@
 "rmin_tau": [0, 0],
 "rmax_tau": [90, 2],
 "freq": [30, 700],
+"fitnessimage": {
 "startidx_tau0": 11,
 "startidx_tau1p5": 11,
+"ngridpoints": 2000,
+"nsectors": 4,
+"tau0_range": [0.1, 70],
+"tau1p5_range": [0.1, 2]
+},
 "signal": {
 "T_sig": 54,
 "num": 3,
