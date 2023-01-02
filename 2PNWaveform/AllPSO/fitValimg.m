@@ -73,7 +73,7 @@ tau0_lin = linspace(params.fitnessimage.tau0_range(1), params.fitnessimage.tau0_
 tau1p5_lin = linspace(params.fitnessimage.tau1p5_range(1), params.fitnessimage.tau1p5_range(2), ngridpoints);
 
 nsectors = params.fitnessimage.nsectors;
-nindex = ngridpoints/nsectors;
+nindex = ngridpoints/sqrt(nsectors);
 
 fitvals = zeros(nindex);
 
