@@ -1,5 +1,6 @@
 function []=rungwpso(filename)
 %% Read JSON File 
+addpath("../../PSO/");
 fname = filename;
 str = fileread(fname);
 filenames = jsondecode(str);
@@ -74,11 +75,15 @@ nRuns = pso.nruns;
 
 % Generate 2PN signal
 if type
-    wave = gen2PNwaveform_tau(fpos, ta, phase, fmin, fmax,tau0,tau1p5,datalen, initial_phase, snr, N);
+     wave = gen2PNwaveform_tau(fpos, ta, phase, fmin, fmax,tau0,tau1p5,datalen, initial_phase, snr, N);
 else
-    wave = gen2PNwaveform(fpos, ta, phase, fmin, fmax, m1,m2,datalen, initial_phase, snr, N);
+     wave = gen2PNwaveform(fpos, ta, phase, fmin, fmax, m1,m2,datalen, initial_phase, snr, N);
 end
-plot(timeVec, wave);
+%Inject QC
+% qclength = 5;
+% qcwave = genqc(timeVec(1:Fs*qclength),snr,[10,3,3],0);
+% wave = [zeros(1,Fs*ta), qcwave, zeros(1,N - Fs*ta - Fs*qclength)];
+% plot(timeVec, wave);
 %Generate Final Signal
 noise = load("noise_realizations.mat");
 dataY = wave + noise.wgn(params.signal.noise,1:end);
@@ -98,7 +103,7 @@ inParams = struct('dataX', dataX,...
 % default value.
 maxSteps = pso.maxSteps;
 if type
-    original_fitVal = -1*mfqc_tau([tau0, tau1p5], inParams);
+    original_fitVal = -1*mfqc_tau([tau0, tau1p5], inParams, noise);
     outStruct = crcbqcpso_tau(inParams,struct('maxSteps',maxSteps),nRuns,Fs);
     bestFitVal = -1*outStruct.bestFitness;
 else
@@ -122,7 +127,7 @@ plot(dataX,outStruct.bestSig,'Color',[76,153,0]/255,'LineWidth',2.0);
 %         'Estimated signal: Best run');
 legend('Data','Signal',...
         'Estimated signal: Best run');
-saveas(gcf,files.psoresultplot);
+% saveas(gcf,files.psoresultplot);
 hold off;
 
 figure;
@@ -135,7 +140,7 @@ title("Best Fitness Values for All Runs");
 xlabel("Iteration");
 ylabel("Best Fitness Value");
 legend;
-saveas(gcf,files.bestfitplot);
+% saveas(gcf,files.bestfitplot);
 hold off;
 
 if type
@@ -150,8 +155,8 @@ if type
     xlabel("\tau_0");
     ylabel("\tau_{1.5}");
     legend;
-    boundary_fig = boundary_plot;
-    saveas(gcf,files.bestlocplot);
+    boundary_plot;
+%     saveas(gcf,files.bestlocplot);
     hold off;
 
     
@@ -194,7 +199,7 @@ else
     xlabel("m_1");
     ylabel("m_2");
     legend;
-    saveas(gcf,params.files.bestlocplot);
+%     saveas(gcf,params.files.bestlocplot);
     hold off;
 
     disp(['Original parameters:  m1= ',num2str(m1),...

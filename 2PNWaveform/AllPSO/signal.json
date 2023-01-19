@@ -3,7 +3,7 @@
 "ta": 40,
 "snr": 10,
 "phase": 0,
-"masses": [1.4, 1.4],
+"masses": [5, 9],
 "rmin": [1, 1],
 "rmax": [30, 30],
 "rmin_tau": [0, 0],
