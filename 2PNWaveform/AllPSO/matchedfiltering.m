@@ -1,4 +1,4 @@
-function timesVec = matchedfiltering(y,q)
+function timesVec = matchedfiltering(y,q,Fs,PSD)
 %function to perform FFT correlation based matched filtering using a signal
 %y = signal + noise and q a unit normalised template starting at t = 0,
 %assumes two-sided psd is provided
@@ -6,12 +6,14 @@ function timesVec = matchedfiltering(y,q)
 %the value of the likelihood at that time.
 
 
+timesVec = innerprodpsd(y,q,Fs,PSD);
 
-Z = fft(y);
-Q = fft(q);
-
-
-timesVec = ifft((Z.*conj(Q)));
+% 
+% Z = fft(y);
+% Q = fft(q);
+% 
+% 
+% timesVec = ifft((Z.*conj(Q)));
 
 
 % plot(real(timesVec));

@@ -75,7 +75,7 @@ nRuns = pso.nruns;
 
 % Generate 2PN signal
 if type
-     wave = gen2PNwaveform_tau(fpos, ta, phase, fmin, fmax,tau0,tau1p5,datalen, initial_phase, snr, N);
+     wave = gen2PNwaveform_tau(fpos, ta, phase, fmin, fmax,tau0,tau1p5,datalen, initial_phase, snr, N,PSD);
 else
      wave = gen2PNwaveform(fpos, ta, phase, fmin, fmax, m1,m2,datalen, initial_phase, snr, N);
 end
@@ -97,7 +97,9 @@ inParams = struct('dataX', dataX,...
                   'initial_phase', initial_phase,...
                   'N', N,...
                   'rmin',rmin,...
-                  'rmax',rmax);
+                  'rmax',rmax,...
+                  'psd',PSD,...
+                  'Fs',Fs);
 % CRCBQCHRPPSO runs PSO on the PSOFITFUNC fitness function. As an
 % illustration of usage, we change one of the PSO parameters from its
 % default value.
@@ -111,7 +113,7 @@ else
     outStruct = crcbqcpso(inParams,struct('maxSteps',maxSteps),nRuns,Fs);
     bestFitVal = -1*outStruct.bestFitness;
 end
-% save('/scratch/09197/raghav/outStruct_tau.mat','outStruct');
+% save(files.output_struct_location,'outStruct');
 
 % Plots
 figure;
@@ -199,7 +201,7 @@ else
     xlabel("m_1");
     ylabel("m_2");
     legend;
-%     saveas(gcf,params.files.bestlocplot);
+%     saveas(gcf,files.bestlocplot);
     hold off;
 
     disp(['Original parameters:  m1= ',num2str(m1),...
