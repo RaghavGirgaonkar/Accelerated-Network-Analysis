@@ -27,6 +27,7 @@ maxidx = find(fvec==700);
 Sn50 = interPSD(minidx);
 Sn700 = interPSD(maxidx);
 
+
 interPSD(1:minidx) = Sn50;
 interPSD(maxidx:end) = Sn700;
 
@@ -34,7 +35,7 @@ figure;
 plot(fvec,interPSD);
 xlabel('Frequency (Hz)');
 ylabel('PSD');
-xlim([0,2048]);
+% xlim([0,2048]);
 title("Original PSD (Two-sided)")
 
 %Make colored Noise
@@ -42,13 +43,15 @@ fltrOrdr = 500;
 
 outNoise = statgaussnoisegen(N,[fvec(:),interPSD(:)],fltrOrdr,Fs);
 
+outNoise_final = outNoise(fltrOrdr+1:end-fltrOrdr);
+
 %Estimate PSD using Welch's Method
-[pxx,f]=pwelch(outNoise, 256,[],[],Fs);
+[pxx,f]=pwelch(outNoise_final, 1024,[],[],Fs);
 figure;
-plot(f,pxx);
+loglog(f,pxx);
 xlabel('Frequency (Hz)');
 ylabel('PSD');
-xlim([0,2048]);
+% xlim([0,2048]);
 title("Estimated PSD (One-sided)")
 % Plot the colored noise realization
 % figure;     

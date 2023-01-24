@@ -12,8 +12,13 @@ function outNoise = statgaussnoisegen(nSamples,psdVals,fltrOrdr,sampFreq)
 
 % Design FIR filter with T(f)= square root of target PSD
 freqVec = psdVals(:,1);
-sqrtPSD = sqrt(psdVals(:,2));
+% sqrtPSD = sqrt(psdVals(:,2));
+sqrtPSD = psdVals(:,2);
 b = fir2(fltrOrdr,freqVec/(sampFreq/2),sqrtPSD);
+
+figure;
+plot(b);
+title("Filter");
 
 %%
 % Generate a WGN realization and pass it through the designed filter
@@ -21,4 +26,5 @@ b = fir2(fltrOrdr,freqVec/(sampFreq/2),sqrtPSD);
 % rng('default'); 
 inNoise = randn(1,nSamples);
 outNoise = sqrt(sampFreq)*fftfilt(b,inNoise);
+% outNoise = fftfilt(b,inNoise);
 
