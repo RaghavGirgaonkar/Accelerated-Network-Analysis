@@ -72,21 +72,30 @@ nRuns = pso.nruns;
 % Reset random number generator to generate the same noise realization,
 % otherwise comment this line out
 % rng('default');
-
+%% Generate Noise
+[noise,PSD] = LIGOnoise(T_sig,num,Fs);
 % Generate 2PN signal
 if type
      wave = gen2PNwaveform_tau(fpos, ta, phase, fmin, fmax,tau0,tau1p5,datalen, initial_phase, snr, N,PSD);
 else
-     wave = gen2PNwaveform(fpos, ta, phase, fmin, fmax, m1,m2,datalen, initial_phase, snr, N);
+     wave = gen2PNwaveform(fpos, ta, phase, fmin, fmax, m1,m2,datalen, initial_phase, snr, N, PSD);
 end
 %Inject QC
 % qclength = 5;
 % qcwave = genqc(timeVec(1:Fs*qclength),snr,[10,3,3],0);
 % wave = [zeros(1,Fs*ta), qcwave, zeros(1,N - Fs*ta - Fs*qclength)];
 % plot(timeVec, wave);
-%Generate Final Signal
-noise = load("noise_realizations.mat");
-dataY = wave + noise.wgn(params.signal.noise,1:end);
+%% Generate Final Signal
+% noise = load("noise_realizations.mat");
+
+
+% dataY = wave + noise.wgn(params.signal.noise,1:end);
+dataY = wave + noise;
+% figure;
+% hold on;
+% plot(timeVec,dataY);
+% plot(timeVec, wave);
+% hold off;
 dataX = timeVec;
 % Input parameters for CRCBQCHRPPSO
 inParams = struct('dataX', dataX,...
@@ -105,7 +114,7 @@ inParams = struct('dataX', dataX,...
 % default value.
 maxSteps = pso.maxSteps;
 if type
-    original_fitVal = -1*mfqc_tau([tau0, tau1p5], inParams, noise);
+    original_fitVal = -1*mfqc_tau([tau0, tau1p5], inParams);
     outStruct = crcbqcpso_tau(inParams,struct('maxSteps',maxSteps),nRuns,Fs);
     bestFitVal = -1*outStruct.bestFitness;
 else

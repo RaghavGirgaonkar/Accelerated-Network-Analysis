@@ -14,7 +14,7 @@ wave = ifft(fwave);
 
 sampFreq = N/datalen;
 
-[wave,normFac] = normsig4psd(wave,sampFreq,PSD,snr);
+[wave,~] = normsig4psd(wave,sampFreq,PSD,snr);
 % 
 % wave = snr*wave/norm(wave);
 

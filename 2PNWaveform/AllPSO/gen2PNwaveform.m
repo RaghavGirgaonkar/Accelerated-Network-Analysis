@@ -1,4 +1,4 @@
-function wave = gen2PNwaveform(fpos, ta, phase, fmin, fmax,m1, m2,datalen,initial_phase,snr,N)
+function wave = gen2PNwaveform(fpos, ta, phase, fmin, fmax,m1, m2,datalen,initial_phase,snr,N,PSD)
 
 fwavepos = waveform(fpos,ta,phase,fmin,fmax,m1,m2,datalen,initial_phase);
 
@@ -12,6 +12,9 @@ fwave = [fwavepos, fwaveneg];
 
 wave = ifft(fwave);
 
-wave = snr*wave/norm(wave);
+sampFreq = N/datalen;
+[wave,~] = normsig4psd(wave,sampFreq,PSD,snr);
+
+% wave = snr*wave/norm(wave);
 
 

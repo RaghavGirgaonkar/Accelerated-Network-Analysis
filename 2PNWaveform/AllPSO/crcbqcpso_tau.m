@@ -95,9 +95,9 @@ for lpruns = 1:nRuns
     tau0 = qcCoefs(1);
     tau1p5 = qcCoefs(2);
     q0 = gen2PNwaveform_tau(params.fpos, estTa, 0, params.frange(1), params.frange(2), tau0,...
-    tau1p5,params.datalen,0,1,params.N);
+    tau1p5,params.datalen,0,1,params.N,params.psd);
     q1 = gen2PNwaveform_tau(params.fpos, estTa, pi/2, params.frange(1), params.frange(2), tau0,...
-    tau1p5,params.datalen,0,1,params.N);
+    tau1p5,params.datalen,0,1,params.N,params.psd);
     
 %     sizeq0 = size(estSigq0_shifted)
     %Estimated Phase
@@ -113,7 +113,7 @@ for lpruns = 1:nRuns
     %Estimated Signal
 %     estSigTemp = genqc(timeVecSig,1,qcCoefs,estPhase);
     estSig = gen2PNwaveform_tau(params.fpos, estTa, estPhase, params.frange(1), params.frange(2), tau0,...
-    tau1p5,params.datalen,0,estAmp,params.N);
+    tau1p5,params.datalen,0,estAmp,params.N,params.psd);
 %     estSigTemp_shifted = [zeros(1,floor(estTa*sampling_freq)-1), estSigTemp, zeros(1, nSamples - nSamplesSig - floor(estTa*sampling_freq)+1)];
 %     estSig = estAmp*estSigTemp;
     outResults.allRunsOutput(lpruns).estSig = estSig;
