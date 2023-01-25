@@ -6,7 +6,7 @@ function timesVec = matchedfiltering(y,q,Fs,PSD)
 %the value of the likelihood at that time.
 
 
-timesVec = innerprodpsd(y,q,Fs,PSD);
+timesVec = mfinnerprodpsd(y,q,Fs,PSD);
 
 % 
 % Z = fft(y);

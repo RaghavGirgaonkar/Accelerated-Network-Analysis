@@ -1,5 +1,5 @@
 {
-"type": "mass",
-"maxSteps": 5,
+"type": "tau",
+"maxSteps": 10,
 "nruns": 8
 }
