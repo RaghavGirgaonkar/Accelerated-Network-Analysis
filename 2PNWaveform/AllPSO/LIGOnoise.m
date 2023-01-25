@@ -43,8 +43,9 @@ interPSD(maxidx:end) = Sn700;
 %% Make colored Noise
 fltrOrdr = 500;
 % 
-outNoise = statgaussnoisegen(N,[fvec(:),interPSD(:)],fltrOrdr,Fs);
+outNoise_t = statgaussnoisegen(N+fltrOrdr,[fvec(:),interPSD(:)],fltrOrdr,Fs);
 
+outNoise = outNoise_t(fltrOrdr+1:end);
 % plot(timeVec,outNoise);
 % 
 % %Estimate PSD using Welch's Method

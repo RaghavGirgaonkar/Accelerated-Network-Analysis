@@ -91,11 +91,11 @@ end
 
 % dataY = wave + noise.wgn(params.signal.noise,1:end);
 dataY = wave + noise;
-% figure;
-% hold on;
-% plot(timeVec,dataY);
-% plot(timeVec, wave);
-% hold off;
+figure;
+hold on;
+plot(timeVec,dataY);
+plot(timeVec, wave);
+hold off;
 dataX = timeVec;
 % Input parameters for CRCBQCHRPPSO
 inParams = struct('dataX', dataX,...
