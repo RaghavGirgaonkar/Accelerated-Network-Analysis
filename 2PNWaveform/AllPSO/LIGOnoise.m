@@ -1,4 +1,4 @@
-function [outNoise, interPSD] = LIGOnoise(T_sig, num, Fs)
+function [outNoise, interPSD] = LIGOnoise(T_sig, num, Fs,noise,noise_num)
 %Load PSD 
 y = load('iLIGOSensitivity.txt','-ascii');
 freqs = y(:,1);
@@ -43,7 +43,7 @@ interPSD(maxidx:end) = Sn700;
 %% Make colored Noise
 fltrOrdr = 500;
 % 
-outNoise_t = statgaussnoisegen(N+fltrOrdr,[fvec(:),interPSD(:)],fltrOrdr,Fs);
+outNoise_t = statgaussnoisegen(N+fltrOrdr,[fvec(:),interPSD(:)],fltrOrdr,Fs, noise_num);
 
 outNoise = outNoise_t(fltrOrdr+1:end);
 % plot(timeVec,outNoise);
