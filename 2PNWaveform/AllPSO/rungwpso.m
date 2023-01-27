@@ -73,7 +73,7 @@ nRuns = pso.nruns;
 % otherwise comment this line out
 % rng('default');
 %% Generate Noise
-[noise,PSD] = LIGOnoise(T_sig,num,Fs);
+[noise,PSD] = LIGOnoise(T_sig,num,Fs, params.signal.noise);
 % Generate 2PN signal
 if type
      wave = gen2PNwaveform_tau(fpos, ta, phase, fmin, fmax,tau0,tau1p5,datalen, initial_phase, snr, N,PSD);
@@ -90,6 +90,8 @@ end
 
 
 % dataY = wave + noise.wgn(params.signal.noise,1:end);
+% disp(size(wave));
+% disp(size(noise));
 dataY = wave + noise;
 figure;
 hold on;
