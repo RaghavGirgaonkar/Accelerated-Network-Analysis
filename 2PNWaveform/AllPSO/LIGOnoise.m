@@ -1,4 +1,4 @@
-function [outNoise, interPSD] = LIGOnoise(T_sig, num, Fs,noise,noise_num)
+function [outNoise, interPSD] = LIGOnoise(T_sig, num, Fs,noise_num)
 %Load PSD 
 y = load('iLIGOSensitivity.txt','-ascii');
 freqs = y(:,1);
@@ -21,6 +21,10 @@ fvec = 0:(1/T):(Fs/2);
 %Interpolation
 interPSD = interp1(freqs,sqrtPSD, fvec);
 
+% kNyq = floor(N/2)+1;
+% negFStrt = 1-mod(nSamples,2);
+% psdVectotal = [interPSD,psdVals((kNyq-negFStrt):-1:2)];
+
 % Modifications
 minidx = find(fvec==50);
 maxidx = find(fvec==700);
@@ -31,7 +35,13 @@ Sn700 = interPSD(maxidx);
 interPSD(1:minidx) = Sn50;
 interPSD(maxidx:end) = Sn700;
 
-% loglog(fvec,interPSD);
+%Construct two-sided PSD
+% kNyq = floor(N/2)+1;
+% negFStrt = 1-mod(N,2);
+% TotalpsdVec = [interPSD((kNyq-negFStrt):-1:2), interPSD];
+% totfvec = [fvec((kNyq-negFStrt):-1:2), fvec];
+
+% loglog(totfvec,TotalpsdVec);
 
 % figure;
 % plot(fvec,interPSD);

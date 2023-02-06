@@ -73,7 +73,14 @@ nRuns = pso.nruns;
 % otherwise comment this line out
 % rng('default');
 %% Generate Noise
-[noise,PSD] = LIGOnoise(T_sig,num,Fs, params.signal.noise);
+% [noise,PSD] = LIGOnoise(N,Fs, params.signal.noise);
+%% Load One Sided PSDs
+E = load(files.psdfile);
+estPSDs = E.estS';
+sz = size(estPSDs);
+PSD = resample(estPSDs, floor(N/2) + 1, sz(2));
+%% Generate Colored Noise
+noise = genColNoise(PSD, Fs, [fmin,fmax], params.signal.noise);
 % Generate 2PN signal
 if type
      wave = gen2PNwaveform_tau(fpos, ta, phase, fmin, fmax,tau0,tau1p5,datalen, initial_phase, snr, N,PSD);
@@ -93,11 +100,11 @@ end
 % disp(size(wave));
 % disp(size(noise));
 dataY = wave + noise;
-figure;
-hold on;
-plot(timeVec,dataY);
-plot(timeVec, wave);
-hold off;
+% figure;
+% hold on;
+% plot(timeVec,dataY);
+% plot(timeVec, wave);
+% hold off;
 dataX = timeVec;
 % Input parameters for CRCBQCHRPPSO
 inParams = struct('dataX', dataX,...

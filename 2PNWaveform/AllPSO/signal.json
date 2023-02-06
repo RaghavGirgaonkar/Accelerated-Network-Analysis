@@ -1,9 +1,9 @@
 {
-"sampling_freq": 2048,
-"ta": 40,
+"sampling_freq": 4096,
+"ta": 9,
 "snr": 10,
 "phase": 0,
-"masses": [5, 9],
+"masses": [14, 7],
 "rmin": [1, 1],
 "rmax": [30, 30],
 "rmin_tau": [0, 0],
@@ -18,8 +18,8 @@
 "tau1p5_range": [0.1, 2]
 },
 "signal": {
-"T_sig": 54,
-"num": 3,
+"T_sig": 16,
+"num": 1,
 "noise": 1
 }
 }

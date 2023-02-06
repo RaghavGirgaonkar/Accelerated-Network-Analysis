@@ -19,7 +19,7 @@ b = fir2(fltrOrdr,freqVec/(sampFreq/2),sqrtPSD);
 % Generate a WGN realization and pass it through the designed filter
 % (Comment out the line below if new realizations of WGN are needed in each run of this script)
 % rng('default'); 
-noise = load("50_noise_realizations.mat");
+noise = load("~/Documents/PSD-Estimation/5_noise_4096.mat");
 inNoise_t = noise.wgn(noise_num,1:end);
 inNoise = [randn(1,fltrOrdr), inNoise_t];
 % inNoise = randn(1,nSamples);
