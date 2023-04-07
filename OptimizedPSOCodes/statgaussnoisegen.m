@@ -1,4 +1,4 @@
-function outNoise = statgaussnoisegen(nSamples,psdVals,fltrOrdr,sampFreq)
+function outNoise = statgaussnoisegen(nSamples,psdVals,fltrOrdr,sampFreq, noise_num)
 %Generate a realization of stationary Gaussian noise with given 2-sided PSD
 %Y = STATGAUSSNOISEGEN(N,PSD,O,Fs)
 %Generates a realization Y of stationary gaussian noise with a target
@@ -13,18 +13,15 @@ function outNoise = statgaussnoisegen(nSamples,psdVals,fltrOrdr,sampFreq)
 % Design FIR filter with T(f)= square root of target PSD
 freqVec = psdVals(:,1);
 sqrtPSD = sqrt(psdVals(:,2));
-% sqrtPSD = psdVals(:,2);
 b = fir2(fltrOrdr,freqVec/(sampFreq/2),sqrtPSD);
-
-figure;
-plot(b);
-title("Filter");
 
 %%
 % Generate a WGN realization and pass it through the designed filter
 % (Comment out the line below if new realizations of WGN are needed in each run of this script)
 % rng('default'); 
-inNoise = randn(1,nSamples+ fltrOrdr);
+noise = load("5_noise_4096.mat");
+inNoise_t = noise.wgn(noise_num,1:end);
+inNoise = [randn(1,fltrOrdr), inNoise_t];
+% inNoise = randn(1,nSamples);
 outNoise = sqrt(sampFreq)*fftfilt(b,inNoise);
-% outNoise = fftfilt(b,inNoise);
 

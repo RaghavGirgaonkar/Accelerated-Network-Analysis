@@ -10,7 +10,7 @@ timeVec = (0:(nSamples-1))/sampFreq;
 targetPSD = @(f) (f>=100 & f<=300).*(f-100).*(300-f)/10000;
 
 %Plot PSD
-freqVec = 0:0.1:512;
+freqVec = 0:(1/64):512;
 psdVec = targetPSD(freqVec);
 plot(freqVec,psdVec);
 xlabel("Frequency");

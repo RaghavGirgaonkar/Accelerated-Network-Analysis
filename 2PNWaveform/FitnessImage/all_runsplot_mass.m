@@ -14,7 +14,7 @@ tau1p5_evolution = zeros(50,500);
 tau0 = 5*ones(1,500);
 tau1p5= 9*ones(1,500);
 
-file_dir = '/Users/raghav/Documents/MassvTauPSO/MassPSO/SNR_6_m1_5_m2_9_ta_40_iter_500/outstruct_mass_';
+file_dir = '/Users/raghav/Documents/MassvTauPSO/GenMvT/Mass/outstruct_mass_';
 
 figure;
 hold on;
@@ -80,21 +80,21 @@ hold off;
 
 %% Fitness/OG Fitness Value Plots
 final_fitvals = zeros(1,50);
+% 
+% for j = 1:50
+%         S = load([file_dir  num2str(j) '.mat']);
+% %             disp(['files' num2str(j) num2str(i) '.mat']);
+%         bestRun = S.outStruct.bestRun;
+%         rVec = S.outStruct.allRunsOutput(bestRun).allBestFit(end);
+%         final_fitvals(j) = rVec;
+% %         all_fitval(j,:) = rVec/(-1*final_fitval);
+% %         plot(iterVec,rVec/(-1*final_fitval), 'HandleVisibility','off');
+% end
 
-for j = 1:50
-        S = load([file_dir  num2str(j) '.mat']);
-%             disp(['files' num2str(j) num2str(i) '.mat']);
-        bestRun = S.outStruct.bestRun;
-        rVec = S.outStruct.allRunsOutput(bestRun).allBestFit(end);
-        final_fitvals(j) = rVec;
-%         all_fitval(j,:) = rVec/(-1*final_fitval);
-%         plot(iterVec,rVec/(-1*final_fitval), 'HandleVisibility','off');
-end
 
-
-% filedir = '/Users/raghav/Documents/MassvTauPSO/MassPSO/SNR_6_m1_5_m2_9_ta_40_iter_500/';
-% M = load([filedir 'final_fitvals.txt']);
-% final_fitVals = M(:,2)';
+filedir = '/Users/raghav/Documents/MassvTauPSO/GenMvT/Mass/';
+ M = load([filedir 'final_fitvals.txt']);
+final_fitVals = M(:,2)';
 all_fitval = zeros(50,500);
 figure;
 hold on;
@@ -114,6 +114,32 @@ plot(iterVec,mean_fit,DisplayName='Mean', Color='black', LineWidth=5);
 xlabel('Iteration');
 ylabel('Fitness Value/Final Fitness Value')
 title('Best Run Evolution of Fitness Value/Final Fitness Value over 50 Noise realizations');
+legend;
+hold off;
+
+%% Fitness/OG Fitness Value Plots
+filedir = '/Users/raghav/Documents/MassvTauPSO/GenMvT/Mass/';
+M = load([filedir 'og_fitvals.txt']);
+og_fitVals = M(:,2)';
+all_fitval = zeros(50,500);
+figure;
+hold on;
+for j = 1:50
+        S = load([file_dir  num2str(j) '.mat']);
+%             disp(['files' num2str(j) num2str(i) '.mat']);
+        bestRun = S.outStruct.bestRun;
+        rVec = S.outStruct.allRunsOutput(bestRun).allBestFit;
+        og_fitval = og_fitVals(j);
+        all_fitval(j,:) = rVec/(-1*og_fitval);
+        plot(iterVec,rVec/(-1*og_fitval), 'HandleVisibility','off');
+end
+
+mean_fit = mean(all_fitval);
+plot(iterVec,mean_fit,DisplayName='Mean', Color='black', LineWidth=5);
+% plot(iterVec,tau0,DisplayName='Original Value', Color='cyan', LineWidth=2);
+xlabel('Iteration');
+ylabel('Fitness Value/Original Fitness Value')
+title('Best Run Evolution of Fitness Value/Original Fitness Value over 50 Noise realizations');
 legend;
 hold off;
 
@@ -166,3 +192,21 @@ end
  title('m_2 vs Fitness Value for 50 Noise Realizations');
 %  legend;
  hold off;
+
+ figure;
+hold on;
+for j = 1:50
+
+        S = load([file_dir  num2str(j) '.mat']);
+%             disp(['files' num2str(j) num2str(i) '.mat']);
+        m = S.outStruct.bestQcCoefs;
+        scatter(m(1), m(2), 'filled', 'HandleVisibility','off');      
+end
+scatter(5,9,140,'red','filled', 'DisplayName','Original Parameters');
+ xlabel('m_1');
+ ylabel('m_2')
+ title('m_1 vs m_2 for 50 Noise Realizations');
+ legend;
+ hold off;
+
+ 

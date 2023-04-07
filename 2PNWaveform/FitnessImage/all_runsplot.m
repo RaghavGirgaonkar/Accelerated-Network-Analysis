@@ -14,7 +14,7 @@ tau1p5_evolution = zeros(50,500);
 tau0 = 3.9998*ones(1,500);
 tau1p5= 0.52173*ones(1,500);
 
-file_dir = '/Users/raghav/Documents/MassvTauPSO/TauPSO/SNR_6_m1_5_m2_9_ta_40_iter_500/outstruct_tau_';
+file_dir = '/Users/raghav/Documents/MassvTauPSO/GenMvT/Tau/outstruct_tau_';
 
 figure;
 hold on;
@@ -78,8 +78,8 @@ title('Best Run Evolution of Fitness Value over 50 Noise realizations');
 legend;
 hold off;
 
-%% Fitness/OG Fitness Value Plots
-filedir = '/Users/raghav/Documents/MassvTauPSO/TauPSO/SNR_6_m1_5_m2_9_ta_40_iter_500/';
+%% Fitness/Final Fitness Value Plots
+filedir = '/Users/raghav/Documents/MassvTauPSO/GenMvT/Tau/';
 M = load([filedir 'final_fitvals.txt']);
 final_fitVals = M(:,2)';
 all_fitval = zeros(50,500);
@@ -101,6 +101,32 @@ plot(iterVec,mean_fit,DisplayName='Mean', Color='black', LineWidth=5);
 xlabel('Iteration');
 ylabel('Fitness Value/Final Fitness Value')
 title('Best Run Evolution of Fitness Value/Final Fitness Value over 50 Noise realizations');
+legend;
+hold off;
+
+%% Fitness/OG Fitness Value Plots
+filedir = '/Users/raghav/Documents/MassvTauPSO/GenMvT/Tau/';
+M = load([filedir 'og_fitvals.txt']);
+og_fitVals = M(:,2)';
+all_fitval = zeros(50,500);
+figure;
+hold on;
+for j = 1:50
+        S = load([file_dir  num2str(j) '.mat']);
+%             disp(['files' num2str(j) num2str(i) '.mat']);
+        bestRun = S.outStruct.bestRun;
+        rVec = S.outStruct.allRunsOutput(bestRun).allBestFit;
+        og_fitval = og_fitVals(j);
+        all_fitval(j,:) = rVec/(-1*og_fitval);
+        plot(iterVec,rVec/(-1*og_fitval), 'HandleVisibility','off');
+end
+
+mean_fit = mean(all_fitval);
+plot(iterVec,mean_fit,DisplayName='Mean', Color='black', LineWidth=5);
+% plot(iterVec,tau0,DisplayName='Original Value', Color='cyan', LineWidth=2);
+xlabel('Iteration');
+ylabel('Fitness Value/Original Fitness Value')
+title('Best Run Evolution of Fitness Value/Original Fitness Value over 50 Noise realizations');
 legend;
 hold off;
 
@@ -152,4 +178,21 @@ end
  ylabel('\tau_{1.5}')
  title('\tau_{1.5} vs Fitness Value for 50 Noise Realizations');
 %  legend;
+ hold off;
+
+  figure;
+hold on;
+for j = 1:50
+
+        S = load([file_dir  num2str(j) '.mat']);
+%             disp(['files' num2str(j) num2str(i) '.mat']);
+        t = S.outStruct.bestQcCoefs;
+        scatter(t(1), t(2), 'filled', 'HandleVisibility','off');      
+end
+scatter(3.9998,0.52173,140,'red','filled', 'DisplayName','Original Parameters');
+ xlabel('\tau_0');
+ ylabel('\tau_{1.5}')
+ boundary_plot;
+ title('\tau_0 vs \tau_{1.5} for 50 Noise Realizations');
+ legend;
  hold off;
