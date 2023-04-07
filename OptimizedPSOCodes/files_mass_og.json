@@ -1,9 +1,0 @@
-{
-"psdfile": "linetest_Job_col_PSD_dataSz4Up2N267SNRR5e-03_C.mat",
-"output_struct_location": "/scratch/09197/raghav/PSD-Estimation/outStruct_mass_og.mat",
-"bestlocplot": "/scratch/09197/raghav/PSD-Estimation/bestloc_mass_og.png",
-"bestfitplot": "/scratch/09197/raghav/PSD-Estimation/bestfitness_mass_og.png",
-"psoresultplot": "/scratch/09197/raghav/PSD-Estimation/psoresults_mass_og.png",
-"fitnessvaluesfile": "/scratch/09197/raghav/PSD-Estimation/fitness_values.txt",
-"fitvalimgfile": "1-1.mat"
-}
