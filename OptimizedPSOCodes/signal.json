@@ -19,7 +19,7 @@
 "tau1p5_range": [0.1, 2]
 },
 "signal": {
-"T_sig_len": 4096,
+"T_sig_len": 2048,
 "T_sig": 54,
 "num": 1,
 "noise": 1

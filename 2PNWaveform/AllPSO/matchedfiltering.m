@@ -1,22 +1,28 @@
-function timesVec = matchedfiltering(y,q,Fs,PSD)
+function timesVec = matchedfiltering(xVec,yVec,~,psdVals)
 %function to perform FFT correlation based matched filtering using a signal
-%y = signal + noise and q a unit normalised template starting at t = 0,
+%xVec = signal + noise and yVec a unit normalised template starting at t = 0,
 %assumes two-sided psd is provided
-%returns ta, the best matching time of the template q in the signal y and
-%the value of the likelihood at that time.
+%returns the matched filtering timeseries of the template yVec in the signal xVec 
 
+%Raghav Girgaonkar, Apr 2023
 
-timesVec = mfinnerprodpsd(y,q,Fs,PSD);
+nSamples = length(xVec);
+if length(yVec) ~= nSamples
+    error('Vectors must be of the same length');
+end
+kNyq = floor(nSamples/2)+1;
+if length(psdVals) ~= kNyq
+    error('PSD values must be specified at positive DFT frequencies');
+end
 
-% 
-% Z = fft(y);
-% Q = fft(q);
-% 
-% 
-% timesVec = ifft((Z.*conj(Q)));
+fftX = fft(xVec);
+fftY = fft(yVec);
+%We take care of even or odd number of samples when replicating PSD values
+%for negative frequencies
+negFStrt = 1-mod(nSamples,2);
+psdVec4Norm = [psdVals,psdVals((kNyq-negFStrt):-1:2)];
 
-
-% plot(real(timesVec));
-% [max_val, max_sample] = max(real(timesVec));
-% fprintf('The max value of t_a is = %f at time = %f\n',max_val,(1/sampling_freq)*max_sample);
-% ta = (1/sampling_freq)*max_sample;
+% dataLen = sampFreq*nSamples;
+% innProd = (1/dataLen)*(fftX./psdVec4Norm)*fftY';
+innProd = (fftX./psdVec4Norm).*conj(fftY);
+timesVec = ifft(innProd);

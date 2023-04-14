@@ -1,5 +1,5 @@
 {
 "signalparamfile": "signal.json",
-"psoparamfile": "pso_tau.json",
+"psoparamfile": "pso.json",
 "filenames": "files.json"
 }

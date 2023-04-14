@@ -87,20 +87,20 @@ for lpruns = 1:nRuns
     tau1p5 = qcCoefs(2);
     phaseq0 = gen2PNwaveform_tau(params.fpos, estTa, 0, params.frange(1), params.frange(2), tau0,...
     tau1p5,params.datalen,0,1,params.N,params.avec, params.normfac);
-%     pq1 = pq0*exp(1j*pi/2);
     fftq0 = phaseq0;
     fftq1 = phaseq0.*params.phaseDiff;
     %Estimated Phase
 %     yq0 = inParams.dataY*q0(:);
 %     yq1 = inParams.dataY*q1(:);
-    yq0 = innerprodpsd(fftq0, params.Fs, params.fftdataYbyPSD);
-    yq1 = innerprodpsd(fftq1, params.Fs, params.fftdataYbyPSD);
+    yq0 = innerprodpsd(fftq0, params.fftdataYbyPSD);
+    yq1 = innerprodpsd(fftq1, params.fftdataYbyPSD);
     estPhase = atan2(yq1,yq0);
     outResults.allRunsOutput(lpruns).estPhase = estPhase;
 
     %Estimated Amplitude
     estAmp = cos(estPhase)*yq0 + sin(estPhase)*yq1;
     outResults.allRunsOutput(lpruns).estAmp = estAmp;
+    
     %Estimated Signal
 %     estSigTemp = genqc(timeVecSig,1,qcCoefs,estPhase);
     estSigphase = gen2PNwaveform_tau(params.fpos, estTa, estPhase, params.frange(1), params.frange(2), tau0,...

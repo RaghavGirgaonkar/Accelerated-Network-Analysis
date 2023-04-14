@@ -1,4 +1,9 @@
 function []=rungwpso(filename)
+% Script to run Chirp-time or Mass Space PSO on a user specified datafile
+% and PSD. 
+
+%Raghav Girgaonkar, Apr 2023
+
 %% Read JSON Files 
 % addpath("../../PSO/");
 fname = filename;
@@ -67,19 +72,15 @@ end
 %% Number of independent PSO runs
 nRuns = pso.nruns;
 
-%% Generate Noise
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Generate Custom Colored Noise
 % [noise,PSD] = LIGOnoise(N,Fs, params.signal.noise);
-%% Load Data Realizations
-E = load(files.psdfile);
-if params.original
-	PSD = E.WELCHPSD;
-else
-	PSD = E.SHAPESPSD;
-end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Pre-processing
+%Make Frequency Magnitude and Phase difference vectors
 Apos = zeros(size(fpos));
-phaseDiffpos = exp(1j*pi/2)*ones(size(fpos));
+phaseDiffpos = -1j*ones(size(fpos));
 
 Apos(2:end) = fpos(2:end).^(-7/6);
 %Modify Apos
@@ -107,53 +108,100 @@ a4fvec = ((fpos(2:end)./fmin).^(-1/3));
 
 avec = [a0fvec ; a1fvec; a2fvec; a3fvec; a4fvec];
 
-%% Generate Final Signal
-S = load(files.datafile);
-dataY = S.dataY;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% SHAPES and WELCH PSD Comparison Case 
+%% If used, uncomment lines using PSD and psdVec4norm and comment lines using TF and TFTotal
+% %% Generate Final Signal
+% S = load(files.datafile);
+% dataY = S.dataY;
+% %% Load PSD
+% E = load(files.psdfile);
+% if params.original
+% 	PSD = E.WELCHPSD;
+% else
+% 	PSD = E.SHAPESPSD;
+% end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%Optional: Windowing the data (to prevent PSO detecting starup transients as
-%signals) Uncomment if needed.
 
-% win = window(@tukeywin, length(dataY_t));
-% dataY = dataY_t.*win';
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% LIGO HDF5 Datafile Case
+dataY = h5read(files.datafile,'/strain/Strain')';
+TF = h5read(files.datafile,'/strain/condTF')';
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% Create entire PSD vector 
+negFStrt = 1-mod(N,2);
+kNyq = floor(N/2)+1;
+TFtotal = [TF, TF((kNyq-negFStrt):-1:2)];
+% psdVec4Norm = [PSD,PSD((kNyq-negFStrt):-1:2)];
+
+%% Create General Normalization Factor
+dataLen = N;
+% AbysqrtPSD = A./sqrt(psdVec4Norm);
+AbysqrtPSD = A.*TFtotal;
+innProd = (1/dataLen)*(AbysqrtPSD)*AbysqrtPSD';
+genNormfacSqr = real(innProd);
+genNormfac = 1/sqrt(genNormfacSqr);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Optional: Generate and Inject custom CBC signal
+% if type
+%     wavephase = gen2PNwaveform_tau(fpos, ta, phase, fmin, fmax,tau0,tau1p5,datalen, initial_phase, snr, N, avec, genNormfac);
+% else
+%     wavephase = gen2PNwaveform(fpos, ta, phase, fmin, fmax, m1,m2,datalen, initial_phase, snr, N, avec, genNormfac);
+% end
+% 
+% wavefourier = A.*wavephase;
+% wavefourier = wavefourier.*TFtotal; %Whitening the injected CBC signal to be consistent with strain data
+% wave = ifft(wavefourier);
+% 
+% %% Inject CBC signal into strain data
+% dataY = dataY + wave;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Optional: Tukey-Windowing the data. (Uncomment if needed.)
+%% This to prevent PSO detecting starup transients as signals in the case 
+%% of custom-made colored noise
+
+% win = window(@tukeywin, length(dataY));
+% dataY = dataY.*win';
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Data Products 
 fftdataY = fft(dataY);
 fftdataY = fftdataY.*A;
 
-%% Create entire PSD vector 
-negFStrt = 1-mod(N,2);
-kNyq = floor(N/2)+1;
-psdVec4Norm = [PSD,PSD((kNyq-negFStrt):-1:2)];
+%% Get FFT of data by total PSD
+%fftdataYbyPSD = fftdataY./psdVec4Norm;
+fftdataYbyPSD = fftdataY.*TFtotal;
 
-%% Create General Normalization Factor
-dataLen = Fs*N;
-AbysqrtPSD = A./sqrt(psdVec4Norm);
-innProd = (1/dataLen)*(AbysqrtPSD)*AbysqrtPSD';
-genNormfacSqr = real(innProd);
-genNormfac = 1/sqrt(genNormfacSqr);
-
-%% Divide FFT of data by PSD
-fftdataYbyPSD = fftdataY./psdVec4Norm;
-
-%% Generate 2PN signal
-if type
-    wavephase = gen2PNwaveform_tau(fpos, ta, phase, fmin, fmax,tau0,tau1p5,datalen, initial_phase, snr, N, avec, genNormfac);
-else
-    wavephase = gen2PNwaveform(fpos, ta, phase, fmin, fmax, m1,m2,datalen, initial_phase, snr, N, avec, genNormfac);
-end
-
-wavefourier = A.*wavephase;
-wave = ifft(wavefourier);
-
-% figure;
-% hold on;
-% plot(timeVec,dataY);
-% plot(timeVec, wave);
-% hold off;
 dataX = timeVec;
 
-%% Input parameters 
+%% Input parameters: Custom PSD and Noise (Uncomment if needed)
+% inParams = struct('dataX', dataX,...
+%                   'fpos', fpos,...
+%                   'dataY', dataY,...
+%                   'fftdataYbyPSD', fftdataYbyPSD,...
+%                   'frange', [fmin,fmax],...
+%                   'datalen',datalen,...,
+%                   'initial_phase', initial_phase,...
+%                   'N', N,...
+%                   'A', A,...
+%                   'phaseDiff', phaseDiff,...
+%                   'normfac', genNormfac,...
+%                   'avec', avec,...
+% 		          'T_sig', T_sig,...
+%                   'rmin',rmin,...
+%                   'rmax',rmax,...
+%                   'psd',PSD,...
+%                   'psdvec', psdVec4Norm,...
+%                   'Fs',Fs);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Input Parameters: HDF5 File
 inParams = struct('dataX', dataX,...
                   'fpos', fpos,...
                   'dataY', dataY,...
@@ -169,9 +217,8 @@ inParams = struct('dataX', dataX,...
 		          'T_sig', T_sig,...
                   'rmin',rmin,...
                   'rmax',rmax,...
-                  'psd',PSD,...
-                  'psdvec', psdVec4Norm,...
                   'Fs',Fs);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 maxSteps = pso.maxSteps;
 if type
@@ -189,7 +236,7 @@ end
 figure;
 hold on;
 plot(dataX,dataY,'.');
-plot(dataX,wave,'r');
+% plot(dataX,wave,'r');
 % for lpruns = 1:nRuns
 %       plot(dataX,outStruct.allRunsOutput(lpruns).estSig,'Color',[51,255,153]/255,'LineWidth',4.0);
 % end

@@ -103,8 +103,8 @@ for lpruns = 1:nRuns
     %Estimated Phase
 %     yq0 = inParams.dataY*q0(:);
 %     yq1 = inParams.dataY*q1(:);
-    yq0 = innerprodpsd(params.dataY, q0, params.Fs, params.psd);
-    yq1 = innerprodpsd(params.dataY, q1, params.Fs, params.psd);
+    yq0 = innerprodpsd(params.dataY, q0, params.psd);
+    yq1 = innerprodpsd(params.dataY, q1, params.psd);
     estPhase = atan2(yq1,yq0);
     outResults.allRunsOutput(lpruns).estPhase = estPhase;
 %     estSigTemp = genqc(timeVecSig,1,qcCoefs,estPhase);

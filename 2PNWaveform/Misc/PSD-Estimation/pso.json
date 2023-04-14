@@ -1,0 +1,5 @@
+{
+"type": "mass",
+"maxSteps": 10,
+"nruns": 8
+}

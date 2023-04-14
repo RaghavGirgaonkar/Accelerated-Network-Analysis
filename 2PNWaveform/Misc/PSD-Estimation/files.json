@@ -1,0 +1,9 @@
+{
+"psdfile": "~/Documents/PSD-Estimation/linetest_Job_col_PSD_dataSz4Up2N267SNRR5e-03_C.mat",
+"output_struct_location": "/scratch/09197/raghav/outStruct_tau.mat",
+"bestlocplot": "/scratch/09197/raghav/bestloc_tau.png",
+"bestfitplot": "/scratch/09197/raghav/bestfitness_tau.png",
+"psoresultplot": "/scratch/09197/raghav/psoresults_tau.png",
+"fitnessvaluesfile": "/scratch/09197/raghav/fitness_values.txt",
+"fitvalimgfile": "1-1.mat"
+}
