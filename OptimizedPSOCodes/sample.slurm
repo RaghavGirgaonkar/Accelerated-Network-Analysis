@@ -13,4 +13,4 @@
 #SBATCH --mail-user=username@utrgv.edu
 
 module load matlab
-matlab -batch  "addpath($SDMBIGDAT19/Codes); cd /working_dir; rungwpso  /path/to/jsonfiles/allparamfiles.json"
+matlab -batch  "addpath($SDMBIGDAT19/CODES); cd /working_dir; rungwpso  /path/to/jsonfiles/allparamfiles.json"
