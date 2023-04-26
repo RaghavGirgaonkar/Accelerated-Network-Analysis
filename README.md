@@ -4,7 +4,7 @@
 
 - Install/clone [SDMBIGDAT19](https://github.com/mohanty-sd/SDMBIGDAT19)
 - If SDMBIGDAT19 is installed at ```$SDMBIGDAT19```, add the following path to MATLAB
-``` addpath($SDMBIGDAT19/Codes); ``` 
+``` addpath($SDMBIGDAT19/CODES); ``` 
 
 ## Running the PSO Script
 
