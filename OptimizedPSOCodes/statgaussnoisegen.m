@@ -1,4 +1,4 @@
-function outNoise = statgaussnoisegen(nSamples,psdVals,fltrOrdr,sampFreq, noise_num)
+function outNoise = statgaussnoisegen(nSamples,psdVals,fltrOrdr,sampFreq, noise_num, noisefile)
 %Generate a realization of stationary Gaussian noise with given 2-sided PSD
 %Y = STATGAUSSNOISEGEN(N,PSD,O,Fs)
 %Generates a realization Y of stationary gaussian noise with a target
@@ -10,18 +10,32 @@ function outNoise = statgaussnoisegen(nSamples,psdVals,fltrOrdr,sampFreq, noise_
 
 %Soumya D. Mohanty, Mar 2019
 
-% Design FIR filter with T(f)= square root of target PSD
+% Added Tukey-windowing option and option to load noise realization from
+% custom pre-made noise files
+
+% Raghav Girgaonkar, Apr 2023
+
+%% Design FIR filter with T(f)= square root of target PSD
 freqVec = psdVals(:,1);
 sqrtPSD = sqrt(psdVals(:,2));
-b = fir2(fltrOrdr,freqVec/(sampFreq/2),sqrtPSD);
+b = fir2(fltrOrdr,freqVec/(sampFreq/2),sqrtPSD,tukeywin(fltrOrdr+1));
 
-%%
-% Generate a WGN realization and pass it through the designed filter
+%% Generate a WGN realization and pass it through the designed filter
+
+%% Uncomment following block of code if using pre-created normal noise file
+%% leave commented otherwise
+
+% noise = load(noisefile);
+% inNoise_t = noise.wgn(noise_num,1:end);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Uncomment following block of code if creating noise vector
+%% leave commented otherwise
 % (Comment out the line below if new realizations of WGN are needed in each run of this script)
 % rng('default'); 
-noise = load("5_noise_4096.mat");
-inNoise_t = noise.wgn(noise_num,1:end);
-inNoise = [randn(1,fltrOrdr), inNoise_t];
-% inNoise = randn(1,nSamples);
+
+inNoise_t = randn(1,nSamples);
+inNoise = [randn(1,fltrOrdr), inNoise_t, randn(1,fltrOrdr)];
 outNoise = sqrt(sampFreq)*fftfilt(b,inNoise);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

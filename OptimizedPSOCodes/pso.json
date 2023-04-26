@@ -1,5 +1,5 @@
 {
 "type": "tau",
-"maxSteps": 1,
-"nruns": 1
+"maxSteps": 1000,
+"nruns": 8
 }

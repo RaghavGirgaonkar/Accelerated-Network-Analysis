@@ -1,8 +1,10 @@
 function timesVec = matchedfiltering(fftXbyPSD, fftY)
-%function to perform FFT correlation based matched filtering using a signal
-%y = signal + noise and q a unit normalised template starting at t = 0,
-%assumes two-sided psd is provided
-%returns the matchedfiltering timeseries
+%% Function to perform FFT correlation based matched filtering 
+% Input: fftXbyPSD = FFT vector of data which has been multiplied by
+%                    frequency magnitude vector A and divided by total PSD 
+%        fftY = Normalized FFT phase vector of quadrature template
+
+% Output: timesVec = MatchedFiltering timeseries vector
 
 %Raghav Girgaonkar, April 2023
 

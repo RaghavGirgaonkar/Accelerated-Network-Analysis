@@ -1,80 +1,62 @@
-function [outNoise, interPSD] = LIGOnoise(T_sig, num, Fs,noise_num)
+function [outNoise, PSD] = LIGOnoise(N, Fs, noise_num, noisefile)
+%% Function to create colored noise using LIGO Design Sensitivities 
+% Design PSD is modified between 15 Hz and 700Hz.
+% Input: N = Total number of samples,
+%        Fs = Sampling Frequency,
+%        (Optional) noise_num = noise realization number from a pre-created noise realizations file
+%        (Optional) noisefile = pre-created noise realizations filename
+% Output: outNoise = colored noise vector,
+%         PSD = two-sided PSD vector for positive DFT frequencies
+
+% Raghav Girgaonkar, April 2023
+
 %Load PSD 
 y = load('iLIGOSensitivity.txt','-ascii');
-freqs = y(:,1);
-sqrtPSD = y(:,2);
+% freqs = y(:,1);
+% sqrtPSD = y(:,2);
+
+%Turn one-sided sensitivity to two-sided
+y(:,2) = (1/sqrt(2))*y(:,2);
+
+% Interpolate sensitivity curve to positive DFT frequencies
+minF = min(y(:,1));
+maxF = max(y(:,1));
+if minF ~= 0
+% f=0 does not exist, put it in
+y = [0, y(1,2);...
+                  y];
+end
+if maxF < Fs/2
+    error('High frequency limit requested is higher than supplied');
+end
 
 
-%Freq
-% Fs = 2048;
-% num=3;
-% T_sig=54;
+%Positive DFT frequencies
+kNyq = floor(N/2)+1;
+fvec = (0:(kNyq-1))*Fs/N;
 
-N = num*T_sig*Fs; %Total number of Time Samples
+%% Interpolation
+interPSD = interp1(y(:,1),y(:,2), fvec);
 
-T = N/Fs;
-timeVec = (0:(N-1))/Fs;
-
-% fvec = freqs(1):(1/T):freqs(end);
-fvec = 0:(1/T):(Fs/2);
-
-%Interpolation
-interPSD = interp1(freqs,sqrtPSD, fvec);
-
-% kNyq = floor(N/2)+1;
-% negFStrt = 1-mod(nSamples,2);
-% psdVectotal = [interPSD,psdVals((kNyq-negFStrt):-1:2)];
-
-% Modifications
-minidx = find(fvec==50);
-maxidx = find(fvec==700);
+%% Modifications, change cutoff frequencies as needed 
+minidx = find(fvec<=15, 1, 'last' );
+maxidx = find(fvec<=700, 1, 'last' );
 
 Sn50 = interPSD(minidx);
 Sn700 = interPSD(maxidx);
-
+ 
 interPSD(1:minidx) = Sn50;
 interPSD(maxidx:end) = Sn700;
 
-%Construct two-sided PSD
-% kNyq = floor(N/2)+1;
-% negFStrt = 1-mod(N,2);
-% TotalpsdVec = [interPSD((kNyq-negFStrt):-1:2), interPSD];
-% totfvec = [fvec((kNyq-negFStrt):-1:2), fvec];
+PSD = interPSD.^2;
 
-% loglog(totfvec,TotalpsdVec);
-
-% figure;
-% plot(fvec,interPSD);
-% xlabel('Frequency (Hz)');
-% ylabel('PSD');
-% xlim([0,2048]);
-% title("Original PSD (Two-sided)")
-% 
 %% Make colored Noise
-fltrOrdr = 500;
-% 
-outNoise_t = statgaussnoisegen(N+fltrOrdr,[fvec(:),interPSD(:)],fltrOrdr,Fs, noise_num);
+fltrOrdr = 10000;
 
-outNoise = outNoise_t(fltrOrdr+1:end);
-% plot(timeVec,outNoise);
-% 
-% %Estimate PSD using Welch's Method
-% [pxx,f]=pwelch(outNoise, 256,[],[],Fs);
-% figure;
-% plot(f,pxx);
-% xlabel('Frequency (Hz)');
-% ylabel('PSD');
-% xlim([0,2048]);
-% title("Estimated PSD (One-sided)")
-% % Plot the colored noise realization
-% % figure;     
-% % plot(timeVec,outNoise);
-% % xlabel("Time");
-% % ylabel("Magnitude");
-% % title("Colored Noise");
-% % figure;
-% % histogram(outNoise);
-% % title("Histogram of Colored Noise");
+outNoise_t = statgaussnoisegen(N+ 2*fltrOrdr,[fvec(:),PSD(:)],fltrOrdr,Fs, noise_num, noisefile);
+
+outNoise = outNoise_t(fltrOrdr+1:end - fltrOrdr);
+
 
 
 

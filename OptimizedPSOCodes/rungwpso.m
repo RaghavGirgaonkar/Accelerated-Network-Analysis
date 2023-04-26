@@ -1,11 +1,9 @@
 function []=rungwpso(filename)
-% Script to run Chirp-time or Mass Space PSO on a user specified datafile
-% and PSD. 
+%% Script to run Chirp-time or Mass Space PSO on a user specified datafile and PSD. 
 
 %Raghav Girgaonkar, Apr 2023
 
 %% Read JSON Files 
-% addpath("../../PSO/");
 fname = filename;
 str = fileread(fname);
 filenames = jsondecode(str);
@@ -73,8 +71,13 @@ end
 nRuns = pso.nruns;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Generate Custom Colored Noise
-% [noise,PSD] = LIGOnoise(N,Fs, params.signal.noise);
+%% Optional: Generate Custom Colored Noise
+%Generate colored noise using the LIGO Design Sensitivity values using a
+%random normal noise realization. Returns, colored noise and two-sided PSD
+%vector for postive DFT frequencies, if used Tukey-windowing data is
+%recommended to account for any start-up transients.
+
+% [noise,PSD] = LIGOnoise(N,Fs, params.signal.noise, files.noisefile);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Pre-processing
@@ -126,7 +129,14 @@ avec = [a0fvec ; a1fvec; a2fvec; a3fvec; a4fvec];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LIGO HDF5 Datafile Case
+%To read conditioned or unconditioned hdf5 data files acquired from GWOSC or GravitySpy. 
+
 dataY = h5read(files.datafile,'/strain/Strain')';
+
+%The conditioning transfer function is stored in /strain/condTF by
+%convention. If used, comment lines corresponding to vectors PSD and
+%psdVec4norm in the following code.
+%% If hdf5 file is not conditioned, comment following line
 TF = h5read(files.datafile,'/strain/condTF')';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -134,19 +144,29 @@ TF = h5read(files.datafile,'/strain/condTF')';
 %% Create entire PSD vector 
 negFStrt = 1-mod(N,2);
 kNyq = floor(N/2)+1;
-TFtotal = [TF, TF((kNyq-negFStrt):-1:2)];
+
+
+%% Uncomment following lines in the case of SHAPES and WELCH PSD, leave commented otherwise
 % psdVec4Norm = [PSD,PSD((kNyq-negFStrt):-1:2)];
+% AbysqrtPSD = A./sqrt(psdVec4Norm);
+
+%% Uncomment following lines in the case of Conditioned LIGO HDF5 file, leave commented otherwise
+TFtotal = [TF, TF((kNyq-negFStrt):-1:2)];
+AbysqrtPSD = A.*TFtotal;
 
 %% Create General Normalization Factor
+% Scalar factor of 1/N is due to Parseval's theorem
 dataLen = N;
-% AbysqrtPSD = A./sqrt(psdVec4Norm);
-AbysqrtPSD = A.*TFtotal;
 innProd = (1/dataLen)*(AbysqrtPSD)*AbysqrtPSD';
 genNormfacSqr = real(innProd);
 genNormfac = 1/sqrt(genNormfacSqr);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Optional: Generate and Inject custom CBC signal
+%This block of code reads input signal parameters from signal.json and
+%creates a custom CBC signal in the time domain that can be injected into
+%the data realization. 
+
 % if type
 %     wavephase = gen2PNwaveform_tau(fpos, ta, phase, fmin, fmax,tau0,tau1p5,datalen, initial_phase, snr, N, avec, genNormfac);
 % else
@@ -154,7 +174,13 @@ genNormfac = 1/sqrt(genNormfacSqr);
 % end
 % 
 % wavefourier = A.*wavephase;
-% wavefourier = wavefourier.*TFtotal; %Whitening the injected CBC signal to be consistent with strain data
+% %% Whitening the injected CBC signal to be consistent with strain data
+% %% Uncomment following line in the case of Conditioned LIGO HDF5 file, leave commented otherwise
+% wavefourier = wavefourier.*TFtotal;
+
+% %% Uncomment following lines in the case of SHAPES and WELCH PSD, leave commented otherwise
+% wavefourier = wavefourier.*psdVec4Norm;
+
 % wave = ifft(wavefourier);
 % 
 % %% Inject CBC signal into strain data
@@ -162,7 +188,7 @@ genNormfac = 1/sqrt(genNormfacSqr);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Optional: Tukey-Windowing the data. (Uncomment if needed.)
+%% Optional: Tukey-Windowing the data.
 %% This to prevent PSO detecting starup transients as signals in the case 
 %% of custom-made colored noise
 
@@ -175,33 +201,16 @@ fftdataY = fft(dataY);
 fftdataY = fftdataY.*A;
 
 %% Get FFT of data by total PSD
+
+%% Uncomment following line in the case of SHAPES and WELCH PSD, leave commented otherwise
 %fftdataYbyPSD = fftdataY./psdVec4Norm;
+
+%% Uncomment following line in the case of Conditioned LIGO HDF5 file, leave commented otherwise
 fftdataYbyPSD = fftdataY.*TFtotal;
 
 dataX = timeVec;
 
-%% Input parameters: Custom PSD and Noise (Uncomment if needed)
-% inParams = struct('dataX', dataX,...
-%                   'fpos', fpos,...
-%                   'dataY', dataY,...
-%                   'fftdataYbyPSD', fftdataYbyPSD,...
-%                   'frange', [fmin,fmax],...
-%                   'datalen',datalen,...,
-%                   'initial_phase', initial_phase,...
-%                   'N', N,...
-%                   'A', A,...
-%                   'phaseDiff', phaseDiff,...
-%                   'normfac', genNormfac,...
-%                   'avec', avec,...
-% 		          'T_sig', T_sig,...
-%                   'rmin',rmin,...
-%                   'rmax',rmax,...
-%                   'psd',PSD,...
-%                   'psdvec', psdVec4Norm,...
-%                   'Fs',Fs);
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Input Parameters: HDF5 File
+%% Input Parameters:
 inParams = struct('dataX', dataX,...
                   'fpos', fpos,...
                   'dataY', dataY,...
@@ -227,12 +236,14 @@ if type
     bestFitVal = -1*outStruct.bestFitness;
 else
     original_fitVal = -1*mfqc([m1, m2], inParams);
-    outStruct = crcbqcpso(inParams,struct('maxSteps',maxSteps),nRuns,Fs);
+    outStruct = crcbqcpso_mass(inParams,struct('maxSteps',maxSteps),nRuns,Fs);
     bestFitVal = -1*outStruct.bestFitness;
 end
+
+%% Optional: Uncomment to save output of PSO in a .mat file
 % save(files.output_struct_location,'outStruct');
 
-%% Plots
+%% Plots, uncomment all saveas() commands to save figures in custom directories
 figure;
 hold on;
 plot(dataX,dataY,'.');
@@ -288,7 +299,8 @@ if type
     est_m1 = (est_M - sqrt(est_M^2 - 4*est_u*est_M))/2;
     est_m2 = (est_M + sqrt(est_M^2 - 4*est_u*est_M))/2;
     
-    
+    %% This will display parameters given through signal.json and PSO-estimated parameters
+    %% Uncomment Original parameter display command if needed
     disp(['Original parameters: tau0= ',num2str(tau0),...
                                   '; tau1p5= ',num2str(tau1p5),...
                                   '; m1= ', num2str(m1/Msolar),...
@@ -320,7 +332,9 @@ else
     legend;
 %     saveas(gcf,files.bestlocplot);
     hold off;
-
+    
+    %% This will display parameters given through signal.json and PSO-estimated parameters
+    %% Uncomment Original parameter display command if needed
     disp(['Original parameters:  m1= ',num2str(m1),...
                                   '; m2= ',num2str(m2),...
                                   '; A = ',num2str(snr),...

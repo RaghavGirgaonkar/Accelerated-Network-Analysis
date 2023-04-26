@@ -1,5 +1,5 @@
 function wave = gen2PNwaveform_tau(fpos, ta, phase, fmin, fmax,tau0, tau1p5,datalen,initial_phase,snr,N, avec, normfac)
-%Returns normalized waveform in the Fourier Domain
+%Returns normalized phase vector of waveform in the Fourier Domain
 
 fwavepos = waveform_tau(fpos,ta,phase,fmin,fmax,tau0,tau1p5,datalen,initial_phase, avec);
 

@@ -1,4 +1,4 @@
-function outResults = crcbqcpso(inParams,psoParams,nRuns, sampling_freq)
+function outResults = crcbqcpso_mass(inParams,psoParams,nRuns, sampling_freq)
 %Regression of 2PNWaveform using Mass Space PSO
 % inParams: Struct containing data and signal parameters
 % psoParams: Struct containing PSO parameters
@@ -96,8 +96,8 @@ for lpruns = 1:nRuns
     %Estimated Phase
 %     yq0 = inParams.dataY*q0(:);
 %     yq1 = inParams.dataY*q1(:);
-    yq0 = innerprodpsd(fftq0, params.Fs, params.fftdataYbyPSD);
-    yq1 = innerprodpsd(fftq1, params.Fs, params.fftdataYbyPSD);
+    yq0 = innerprodpsd(fftq0, params.fftdataYbyPSD);
+    yq1 = innerprodpsd(fftq1, params.fftdataYbyPSD);
     estPhase = atan2(yq1,yq0);
     outResults.allRunsOutput(lpruns).estPhase = estPhase;
 %     estSigTemp = genqc(timeVecSig,1,qcCoefs,estPhase);
