@@ -19,7 +19,7 @@ for lpc = 1:nVecs
     % Only the body of this block should be replaced for different fitness
     % functions
         x = xVec(lpc,:);
-        [fitVal(lpc), max_index] = mfqc(x, params);
+        [fitVal(lpc), max_index] = mfgw_mass(x, params);
     end
 end
 

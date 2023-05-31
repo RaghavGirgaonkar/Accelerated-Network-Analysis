@@ -1,4 +1,4 @@
-function [mfVal, max_arg] = mfqc_tau(x,params)
+function [mfVal, max_arg] = mfgw_tau(x,params)
 %MatchedFiltering for Chirp time space PSO
 %Raghav Girgaonkar, April 2023
 

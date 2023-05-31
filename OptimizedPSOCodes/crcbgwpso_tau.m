@@ -1,5 +1,5 @@
-function outResults = crcbqcpso_mass(inParams,psoParams,nRuns, sampling_freq)
-%Regression of 2PNWaveform using Mass Space PSO
+function outResults = crcbgwpso_tau(inParams,psoParams,nRuns, sampling_freq)
+%Regression of 2PNWaveform using Chirp-Time Space PSO
 % inParams: Struct containing data and signal parameters
 % psoParams: Struct containing PSO parameters
 % nRuns: Number of PSO iterations
@@ -9,21 +9,20 @@ function outResults = crcbqcpso_mass(inParams,psoParams,nRuns, sampling_freq)
 % 'allRunsOutput': An N element struct array containing results from each PSO
 %              run. The fields of this struct are:
 %                 'fitVal': The fitness value.
-%                 'qcCoefs': The coefficients [m1, m2].
+%                 'qcCoefs': The coefficients [tau0, tau1.5].
 %                 'estSig': The estimated signal.
 %                 'totalFuncEvals': The total number of fitness
 %                                   evaluations.
 % 'bestRun': The best run.
 % 'bestFitness': best fitness from the best run.
 % 'bestSig' : The signal estimated in the best run.
-% 'bestQcCoefs' : [m1, m2] found in the best run.
+% 'bestQcCoefs' : [tau0, tau1.5] found in the best run.
 
 %Raghav Girgaonkar, April 2023
 
-
 nSamples = length(inParams.dataX);
 
-fHandle = @(x) psofitfunc(x,inParams);
+fHandle = @(x) psofitfunc_tau(x,inParams);
 
 params = inParams;
 
@@ -59,7 +58,7 @@ end
 %Independent runs of PSO in parallel. Change 'parfor' to 'for' if the
 %parallel computing toolbox is not available.
 % fprintf("Running PSO\n");
-% parpool(nruns);
+% parpool(nRuns);
 parfor lpruns = 1:nRuns
     %Reset random number generator for each worker
     rng(lpruns);
@@ -84,15 +83,12 @@ for lpruns = 1:nRuns
     estTa = ta_index/sampling_freq;
     
     outResults.allRunsOutput(lpruns).estTa = estTa;
-    m1 = qcCoefs(1);
-    m2 = qcCoefs(2);
-    phaseq0 = gen2PNwaveform(params.fpos, estTa, 0, params.frange(1), params.frange(2), m1,...
-    m2,params.datalen,0,1,params.N,params.avec, params.normfac);
-%     pq1 = pq0*exp(1j*pi/2);
+    tau0 = qcCoefs(1);
+    tau1p5 = qcCoefs(2);
+    phaseq0 = gen2PNwaveform_tau(params.fpos, estTa, 0, params.frange(1), params.frange(2), tau0,...
+    tau1p5,params.datalen,0,1,params.N,params.avec, params.normfac);
     fftq0 = phaseq0;
     fftq1 = phaseq0.*params.phaseDiff;
-    
-%     sizeq0 = size(estSigq0_shifted)
     %Estimated Phase
 %     yq0 = inParams.dataY*q0(:);
 %     yq1 = inParams.dataY*q1(:);
@@ -100,15 +96,15 @@ for lpruns = 1:nRuns
     yq1 = innerprodpsd(fftq1, params.fftdataYbyPSD);
     estPhase = atan2(yq1,yq0);
     outResults.allRunsOutput(lpruns).estPhase = estPhase;
-%     estSigTemp = genqc(timeVecSig,1,qcCoefs,estPhase);
-%     estSigTemp_shifted = [zeros(1,floor(timeshift*sampling_freq)-1), estSigTemp, zeros(1, nSamples - nSamplesSig - floor(timeshift*sampling_freq)+1)];
+
     %Estimated Amplitude
     estAmp = cos(estPhase)*yq0 + sin(estPhase)*yq1;
     outResults.allRunsOutput(lpruns).estAmp = estAmp;
+    
     %Estimated Signal
 %     estSigTemp = genqc(timeVecSig,1,qcCoefs,estPhase);
-    estSigphase = gen2PNwaveform(params.fpos, estTa, estPhase, params.frange(1), params.frange(2), m1,...
-    m2,params.datalen,0,estAmp,params.N,params.avec, params.normfac);
+    estSigphase = gen2PNwaveform_tau(params.fpos, estTa, estPhase, params.frange(1), params.frange(2), tau0,...
+    tau1p5,params.datalen,0,estAmp,params.N,params.avec, params.normfac);
     estSigfourier = (params.A).*estSigphase;
     estSig = ifft(estSigfourier);
 %     estSigTemp_shifted = [zeros(1,floor(estTa*sampling_freq)-1), estSigTemp, zeros(1, nSamples - nSamplesSig - floor(estTa*sampling_freq)+1)];

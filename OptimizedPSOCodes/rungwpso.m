@@ -81,35 +81,7 @@ nRuns = pso.nruns;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Pre-processing
-%Make Frequency Magnitude and Phase difference vectors
-Apos = zeros(size(fpos));
-phaseDiffpos = -1j*ones(size(fpos));
-
-Apos(2:end) = fpos(2:end).^(-7/6);
-%Modify Apos
-min_index  = floor(datalen*fmin) + 1;
-max_index = floor(datalen*fmax) + 1;
-Apos(1:min_index-1) = 0;
-Apos(max_index + 1: end) = 0;
-%Make Aneg and Phasediffneg
-if mod(N,2) == 0
-    Aneg = conj(Apos(end-1:-1:2));
-    phaseDiffneg = conj(phaseDiffpos(end-1:-1:2));
-else
-    Aneg = conj(Apos(end:-1:2));
-    phaseDiffneg = conj(phaseDiffpos(end:-1:2));
-end
-%Make full A
-A = [Apos, Aneg];
-phaseDiff = [phaseDiffpos, phaseDiffneg];
-
-a0fvec = ((fpos(2:end)./fmin).^(-5/3));
-a1fvec = ((fpos(2:end)./fmin).^(-4/3));
-a2fvec = ((fpos(2:end)./fmin).^(-3/3));
-a3fvec = ((fpos(2:end)./fmin).^(-2/3));
-a4fvec = ((fpos(2:end)./fmin).^(-1/3));
-
-avec = [a0fvec ; a1fvec; a2fvec; a3fvec; a4fvec];
+[A,avec, phaseDiff] = preprocessing(fmin,fmax, fpos, datalen, N);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% SHAPES and WELCH PSD Comparison Case 
@@ -198,7 +170,7 @@ genNormfac = 1/sqrt(genNormfacSqr);
 
 %% Data Products 
 fftdataY = fft(dataY);
-fftdataY = fftdataY.*A;
+fftdataY = fftdataY.*A;%Pre-multiply frequency magnitude vector A for optimization
 
 %% Get FFT of data by total PSD
 
@@ -231,12 +203,12 @@ inParams = struct('dataX', dataX,...
 
 maxSteps = pso.maxSteps;
 if type
-    original_fitVal = -1*mfqc_tau([tau0, tau1p5], inParams);
-    outStruct = crcbqcpso_tau(inParams,struct('maxSteps',maxSteps),nRuns,Fs);
+    original_fitVal = -1*mfgw_tau([tau0, tau1p5], inParams);
+    outStruct = crcbgwpso_tau(inParams,struct('maxSteps',maxSteps),nRuns,Fs);
     bestFitVal = -1*outStruct.bestFitness;
 else
-    original_fitVal = -1*mfqc([m1, m2], inParams);
-    outStruct = crcbqcpso_mass(inParams,struct('maxSteps',maxSteps),nRuns,Fs);
+    original_fitVal = -1*mfgw_mass([m1, m2], inParams);
+    outStruct = crcbgwpso_mass(inParams,struct('maxSteps',maxSteps),nRuns,Fs);
     bestFitVal = -1*outStruct.bestFitness;
 end
 
@@ -244,6 +216,7 @@ end
 % save(files.output_struct_location,'outStruct');
 
 %% Plots, uncomment all saveas() commands to save figures in custom directories
+% psooutput(outStruct,maxSteps,dataX, nRuns, dataY, tau0, tau1p5, m1, m2, snr, ta, phase, original_fitVal, bestFitVal, c, G, type);
 figure;
 hold on;
 plot(dataX,dataY,'.');
@@ -349,5 +322,4 @@ else
                               '; t_a = ',num2str(outStruct.bestTime),...
                               '; FitVal = ',num2str(bestFitVal)]);
 end
-
 end

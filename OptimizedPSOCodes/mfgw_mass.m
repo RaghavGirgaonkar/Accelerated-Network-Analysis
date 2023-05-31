@@ -1,4 +1,4 @@
-function [mfVal, max_arg] = mfqc(x,params)
+function [mfVal, max_arg] = mfgw_mass(x,params)
 %Generate normalized 2PN Waveform
 % phaseVec = x(1)*params.dataX + x(2)*params.dataXSq + x(3)*params.dataXCb;
 m1 = x(1);
