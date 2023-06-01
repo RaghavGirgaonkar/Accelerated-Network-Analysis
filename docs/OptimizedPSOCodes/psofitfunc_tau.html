@@ -4,7 +4,7 @@
 <head>
   <title>Description of psofitfunc_tau</title>
   <meta name="keywords" content="psofitfunc_tau">
-  <meta name="description" content="rows: points">
+  <meta name="description" content="Fitness function for Chirp-time Space PSO">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html &copy; 2003-2019 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -20,14 +20,18 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="box"><strong>rows: points</strong></div>
+<div class="box"><strong>Fitness function for Chirp-time Space PSO</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 <div class="box"><strong>function [fitVal,varargout] = psofitfunc_tau(xVec,params) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="fragment"><pre class="comment">rows: points
-columns: coordinates of a point</pre></div>
+<div class="fragment"><pre class="comment">Fitness function for Chirp-time Space PSO
+Input: xVec: normalized location vector of mass parameters
+       params: Struct containing signal and data parameters
+Output: fitval: Fitness value at location specified by xVec
+        varargout: Additional output arguments sucha as the index of max
+        value in matchedfiltering timeseries</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
@@ -42,6 +46,6 @@ This function is called by:
 
 
 
-<hr><address>Generated on Thu 01-Jun-2023 12:32:01 by <strong><a href="https://github.com/gllmflndn/m2html">m2html</a></strong> &copy; 2003-2022</address>
+<hr><address>Generated on Thu 01-Jun-2023 14:55:19 by <strong><a href="https://github.com/gllmflndn/m2html">m2html</a></strong> &copy; 2003-2022</address>
 </body>
 </html>

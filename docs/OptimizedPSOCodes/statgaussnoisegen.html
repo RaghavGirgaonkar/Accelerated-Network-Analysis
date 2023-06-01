@@ -27,13 +27,18 @@
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 <div class="fragment"><pre class="comment">Generate a realization of stationary Gaussian noise with given 2-sided PSD
-Y = STATGAUSSNOISEGEN(N,PSD,O,Fs)
+Y = STATGAUSSNOISEGEN(N,PSD,fltrOrdr,Fs, noise_num, noisefile)
 Generates a realization Y of stationary gaussian noise with a target
-2-sided power spectral density given by PSD. Fs is the sampling frequency
-of Y. PSD is an M-by-2 matrix containing frequencies and the corresponding
-PSD values in the first and second columns respectively. The frequencies
-must start from 0 and end at Fs/2. The order of the FIR filter to be used
-is given by O.</pre></div>
+2-sided power spectral density given by PSD. 
+ Fs is the sampling frequency
+of Y. 
+ PSD is an M-by-2 matrix containing frequencies and the corresponding
+PSD values in the first and second columns respectively. 
+ The frequencies
+must start from 0 and end at Fs/2. 
+ The order of the FIR filter to be usedis given by fltrOrdr.
+(Optional) noise_num = noise realization number from a pre-created noise realizations file
+(Optional) noisefile = pre-created noise realizations filename</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
@@ -42,12 +47,12 @@ This function calls:
 </ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="LIGOnoise.html" class="code" title="function [outNoise, PSD] = LIGOnoise(N, Fs, noise_num, noisefile)">LIGOnoise</a>	% Function to create colored noise using LIGO Design Sensitivities</li></ul>
+<li><a href="LIGOnoise.html" class="code" title="function [outNoise, PSD] = LIGOnoise(N, Fs, noise_num, noisefile)">LIGOnoise</a>	Function to create colored noise using LIGO Design Sensitivities</li></ul>
 <!-- crossreference -->
 
 
 
 
-<hr><address>Generated on Thu 01-Jun-2023 12:32:01 by <strong><a href="https://github.com/gllmflndn/m2html">m2html</a></strong> &copy; 2003-2022</address>
+<hr><address>Generated on Thu 01-Jun-2023 14:55:19 by <strong><a href="https://github.com/gllmflndn/m2html">m2html</a></strong> &copy; 2003-2022</address>
 </body>
 </html>

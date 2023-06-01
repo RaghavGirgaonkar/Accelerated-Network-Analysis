@@ -4,7 +4,7 @@
 <head>
   <title>Description of mfgw_mass</title>
   <meta name="keywords" content="mfgw_mass">
-  <meta name="description" content="Generate normalized 2PN Waveform">
+  <meta name="description" content="MatchedFiltering for Mass space PSO">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html &copy; 2003-2019 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -20,28 +20,34 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="box"><strong>Generate normalized 2PN Waveform</strong></div>
+<div class="box"><strong>MatchedFiltering for Mass space PSO</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 <div class="box"><strong>function [mfVal, max_arg] = mfgw_mass(x,params) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="fragment"><pre class="comment">Generate normalized 2PN Waveform
- phaseVec = x(1)*params.dataX + x(2)*params.dataXSq + x(3)*params.dataXCb;</pre></div>
+<div class="fragment"><pre class="comment">MatchedFiltering for Mass space PSO
+Generates a combined matched-filtering timeseries from both quadrature templates and 
+returns index and value of the maximum of this series,
+Input: x = [m1, m2], vector containing mass parameters for
+           creating quadrature templates
+       params: Struct containing signal parameters
+Output: mfVal: Maximum value of total matchedfiltering timeseries
+        max_arg: Index of maximum value</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="gen2PNwaveform.html" class="code" title="function wave = gen2PNwaveform(fpos, ta, phase, fmin, fmax,m1, m2,datalen,initial_phase,snr,N,avec, normfac)">gen2PNwaveform</a>	Returns normalized phase vector of waveform in the Fourier Domain</li><li><a href="matchedfiltering.html" class="code" title="function timesVec = matchedfiltering(fftXbyPSD, fftY)">matchedfiltering</a>	% Function to perform FFT correlation based matched filtering</li></ul>
+<li><a href="gen2PNwaveform.html" class="code" title="function wave = gen2PNwaveform(fpos, ta, phase, fmin, fmax,m1, m2,datalen,initial_phase,snr,N,avec, normfac)">gen2PNwaveform</a>	Creates and Returns normalized phase vector of waveform in the Fourier Domain</li><li><a href="matchedfiltering.html" class="code" title="function timesVec = matchedfiltering(fftXbyPSD, fftY)">matchedfiltering</a>	Function to perform FFT correlation based matched filtering</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="psofitfunc.html" class="code" title="function [fitVal,varargout] = psofitfunc(xVec,params)">psofitfunc</a>	rows: points</li><li><a href="rungwpso.html" class="code" title="function []=rungwpso(filename)">rungwpso</a>	% Script to run Chirp-time or Mass Space PSO on a user specified datafile and PSD.</li></ul>
+<li><a href="psofitfunc.html" class="code" title="function [fitVal,varargout] = psofitfunc(xVec,params)">psofitfunc</a>	Fitness function for Mass Space PSO</li><li><a href="rungwpso.html" class="code" title="function []=rungwpso(filename)">rungwpso</a>	Script to run Chirp-time or Mass Space PSO on a user specified datafile and PSD.</li></ul>
 <!-- crossreference -->
 
 
 
 
-<hr><address>Generated on Thu 01-Jun-2023 12:32:01 by <strong><a href="https://github.com/gllmflndn/m2html">m2html</a></strong> &copy; 2003-2022</address>
+<hr><address>Generated on Thu 01-Jun-2023 14:55:19 by <strong><a href="https://github.com/gllmflndn/m2html">m2html</a></strong> &copy; 2003-2022</address>
 </body>
 </html>

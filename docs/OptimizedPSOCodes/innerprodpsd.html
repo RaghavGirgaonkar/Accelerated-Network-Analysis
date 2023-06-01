@@ -4,7 +4,7 @@
 <head>
   <title>Description of innerprodpsd</title>
   <meta name="keywords" content="innerprodpsd">
-  <meta name="description" content="% Calculates the inner product of vectors X and Y for the case of Gaussian">
+  <meta name="description" content="Calculates the inner product of vectors X and Y for the case of Gaussian">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html &copy; 2003-2019 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -20,18 +20,19 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="box"><strong>% Calculates the inner product of vectors X and Y for the case of Gaussian</strong></div>
+<div class="box"><strong>Calculates the inner product of vectors X and Y for the case of Gaussian</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 <div class="box"><strong>function innProd = innerprodpsd(fftY,fftXbyPSD) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="fragment"><pre class="comment">% Calculates the inner product of vectors X and Y for the case of Gaussian
-% stationary noise having a specified power spectral density. 
+<div class="fragment"><pre class="comment">Calculates the inner product of vectors X and Y for the case of Gaussian
+ stationary noise having a specified power spectral density (PSD) Sn(f). 
  Input: fftY = Normlized FFT vector of the phase term of quadrature template 
         fftXbyPSD = FFT vector of data divided by PSD Sn(f) and
                     multiplied by the frequency amplitude term A. 
- Output: innProd: inner product value</pre></div>
+ Output: innProd: inner product value 
+The scalar normalization factor (1/N) is derived from Parseval's theorem.</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
@@ -46,6 +47,6 @@ This function is called by:
 
 
 
-<hr><address>Generated on Thu 01-Jun-2023 12:32:01 by <strong><a href="https://github.com/gllmflndn/m2html">m2html</a></strong> &copy; 2003-2022</address>
+<hr><address>Generated on Thu 01-Jun-2023 14:55:19 by <strong><a href="https://github.com/gllmflndn/m2html">m2html</a></strong> &copy; 2003-2022</address>
 </body>
 </html>

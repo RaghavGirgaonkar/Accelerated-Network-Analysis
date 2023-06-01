@@ -27,8 +27,14 @@
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 <div class="fragment"><pre class="comment">Function to create Restricted 2PN Waveform in Fourier Domain
-Input is positive DFT frequency vector, returns phase of waveform in Fourier domain
-at positive DFT frequencies</pre></div>
+Input: fvec = Row vector of positive DTFT frequencies 
+       t = Time of arrival in seconds
+       phase = Phase of Coalescence
+       fmin, fmax = minimum and maximum frequency cutoffs for the waveform
+       m1, m2 = Component masses
+       datalen = Length of data realization in seconds
+       avec = Pre-calculated alpha term vector
+Output: fwave = Phase term of waveform in the Fourier domain</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
@@ -37,12 +43,12 @@ This function calls:
 </ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="gen2PNwaveform.html" class="code" title="function wave = gen2PNwaveform(fpos, ta, phase, fmin, fmax,m1, m2,datalen,initial_phase,snr,N,avec, normfac)">gen2PNwaveform</a>	Returns normalized phase vector of waveform in the Fourier Domain</li></ul>
+<li><a href="gen2PNwaveform.html" class="code" title="function wave = gen2PNwaveform(fpos, ta, phase, fmin, fmax,m1, m2,datalen,initial_phase,snr,N,avec, normfac)">gen2PNwaveform</a>	Creates and Returns normalized phase vector of waveform in the Fourier Domain</li></ul>
 <!-- crossreference -->
 
 
 
 
-<hr><address>Generated on Thu 01-Jun-2023 12:32:01 by <strong><a href="https://github.com/gllmflndn/m2html">m2html</a></strong> &copy; 2003-2022</address>
+<hr><address>Generated on Thu 01-Jun-2023 14:55:19 by <strong><a href="https://github.com/gllmflndn/m2html">m2html</a></strong> &copy; 2003-2022</address>
 </body>
 </html>

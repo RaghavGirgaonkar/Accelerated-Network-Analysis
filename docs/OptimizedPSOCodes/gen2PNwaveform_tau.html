@@ -4,7 +4,7 @@
 <head>
   <title>Description of gen2PNwaveform_tau</title>
   <meta name="keywords" content="gen2PNwaveform_tau">
-  <meta name="description" content="Returns normalized phase vector of waveform in the Fourier Domain">
+  <meta name="description" content="Creates and Returns normalized phase vector of waveform in the Fourier Domain">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html &copy; 2003-2019 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -20,13 +20,16 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="box"><strong>Returns normalized phase vector of waveform in the Fourier Domain</strong></div>
+<div class="box"><strong>Creates and Returns normalized phase vector of waveform in the Fourier Domain</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 <div class="box"><strong>function wave = gen2PNwaveform_tau(fpos, ta, phase, fmin, fmax,tau0, tau1p5,datalen,initial_phase,snr,N, avec, normfac) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="fragment"><pre class="comment">Returns normalized phase vector of waveform in the Fourier Domain</pre></div>
+<div class="fragment"><pre class="comment">Creates and Returns normalized phase vector of waveform in the Fourier Domain
+General expression for a 2PN waveform in a fourier domain is 
+ W(f) = A(f)exp(-iPsi(f)), this function returns exp(-iPsi(f))
+ Waveform generation happens through chirp-time values tau0, tau1.5</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
@@ -41,6 +44,6 @@ This function is called by:
 
 
 
-<hr><address>Generated on Thu 01-Jun-2023 12:32:01 by <strong><a href="https://github.com/gllmflndn/m2html">m2html</a></strong> &copy; 2003-2022</address>
+<hr><address>Generated on Thu 01-Jun-2023 14:55:19 by <strong><a href="https://github.com/gllmflndn/m2html">m2html</a></strong> &copy; 2003-2022</address>
 </body>
 </html>
