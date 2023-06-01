@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of psooutput</title>
+  <meta name="keywords" content="psooutput">
+  <meta name="description" content="OUTPUT Display PSO estimated parameters and make plots">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003-2019 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html OptimizedPSOCodes -->
+<h1>psooutput
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OUTPUT Display PSO estimated parameters and make plots</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function []=psooutput(outStruct,maxSteps, nRuns, dataX, dataY, tau0, tau1p5, m1, m2, snr, ta, phase, original_fitVal, bestFitVal, c, G, type) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">OUTPUT Display PSO estimated parameters and make plots
+   Input: outStruct: Structure returned by PSO
+          maxSteps: Maximum iterations of PS)
+          nRuns: Number of independent PSO runs
+          dataX: time vector
+          dataY: data vector
+          tau0, tau1p5: Chirp time parameters (initial)
+          m1, m2: Component masses (initial)
+          snr: Initial specified snr
+          ta: Initial time of arrival
+          phase: Initial Phase
+          original_fitVal: Fitness value at the true parameter location
+          bestFitVal: Final best run fitness value found by PSO
+          c, G: Constants
+          type: Flag to specify Chirp time (Mass) space: 1 (0)
+   Output: 1. Overlay plot of data realization and estimated signal from
+              best run
+           2. Plot of Evolution of Fitness Values for all runs over iteration
+           3. Plot of Evolution of Best parameter values for all runs
+           4. Displays Original (if custom signal is injected) and
+              estimated PSO parameters 
+   Note: saveas() commands can be commented and uncommented based on need
+         of saving figures</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="boundary_plot.html" class="code" title="function boundary_fig = boundary_plot">boundary_plot</a>	Creates and returns a Boundary Plot as a figure in the Chirp-time (Tau1.5 and Tau0) space</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Thu 01-Jun-2023 14:55:19 by <strong><a href="https://github.com/gllmflndn/m2html">m2html</a></strong> &copy; 2003-2022</address>
+</body>
+</html>

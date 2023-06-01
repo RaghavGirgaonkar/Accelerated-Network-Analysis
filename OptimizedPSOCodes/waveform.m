@@ -1,7 +1,15 @@
 function fwave = waveform(fvec, t, phase, fmin, fmax,m1, m2,datalen,initial_phase, avec)
 %Function to create Restricted 2PN Waveform in Fourier Domain
-%Input is positive DFT frequency vector, returns phase of waveform in Fourier domain
-%at positive DFT frequencies
+%Input: fvec = Row vector of positive DTFT frequencies 
+%       t = Time of arrival in seconds
+%       phase = Phase of Coalescence
+%       fmin, fmax = minimum and maximum frequency cutoffs for the waveform
+%       m1, m2 = Component masses
+%       datalen = Length of data realization in seconds
+%       avec = Pre-calculated alpha term vector
+%Output: fwave = Phase term of waveform in the Fourier domain
+
+%Raghav Girgaonkar, April 2023
 
 %% Constants
 c = 3*10^8;

@@ -1,5 +1,13 @@
 function [mfVal, max_arg] = mfgw_tau(x,params)
 %MatchedFiltering for Chirp time space PSO
+%Generates a combined matched-filtering timeseries from both quadrature templates and 
+%returns index and value of the maximum of this series,
+%Input: x = [tau0, tau1.5], vector containing chirp-time parameters for
+%           creating quadrature templates
+%       params: Struct containing signal parameters
+%Output: mfVal: Maximum value of total matchedfiltering timeseries
+%        max_arg: Index of maximum value
+
 %Raghav Girgaonkar, April 2023
 
 %Generate normalized quadrature templates

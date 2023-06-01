@@ -1,11 +1,10 @@
 function outResults = crcbgwpso_mass(inParams,psoParams,nRuns, sampling_freq)
 %Regression of 2PNWaveform using Mass Space PSO
-% inParams: Struct containing data and signal parameters
-% psoParams: Struct containing PSO parameters
-% nRuns: Number of PSO iterations
-% sampling_freq: Sampling Frequency of data
-
-%The fields of O are:
+% Input: inParams: Struct containing data and signal parameters
+%        psoParams: Struct containing PSO parameters
+%        nRuns: Number of PSO iterations
+%        sampling_freq: Sampling Frequency of data
+% Output: outResults: Struct containing the following parameters
 % 'allRunsOutput': An N element struct array containing results from each PSO
 %              run. The fields of this struct are:
 %                 'fitVal': The fitness value.

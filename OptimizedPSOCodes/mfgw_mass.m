@@ -1,6 +1,15 @@
 function [mfVal, max_arg] = mfgw_mass(x,params)
-%Generate normalized 2PN Waveform
-% phaseVec = x(1)*params.dataX + x(2)*params.dataXSq + x(3)*params.dataXCb;
+%MatchedFiltering for Mass space PSO
+%Generates a combined matched-filtering timeseries from both quadrature templates and 
+%returns index and value of the maximum of this series,
+%Input: x = [m1, m2], vector containing mass parameters for
+%           creating quadrature templates
+%       params: Struct containing signal parameters
+%Output: mfVal: Maximum value of total matchedfiltering timeseries
+%        max_arg: Index of maximum value
+
+
+%Raghav Girgaonkar, April 2023
 m1 = x(1);
 m2 = x(2);
 phaseq0 = gen2PNwaveform(params.fpos, 0, 0, params.frange(1), params.frange(2), m1,...

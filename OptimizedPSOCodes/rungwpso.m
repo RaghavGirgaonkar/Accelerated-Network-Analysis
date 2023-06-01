@@ -1,5 +1,6 @@
 function []=rungwpso(filename)
-%% Script to run Chirp-time or Mass Space PSO on a user specified datafile and PSD. 
+%Script to run Chirp-time or Mass Space PSO on a user specified datafile and PSD.
+%Refer to User Manual for usage
 
 %Raghav Girgaonkar, Apr 2023
 

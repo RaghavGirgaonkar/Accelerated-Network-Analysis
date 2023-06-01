@@ -1,5 +1,6 @@
 function boundary_fig = boundary_plot
-%% Plots in the m1, m2 space and the Tau1.5 and Tau0 space
+% Creates and returns a Boundary Plot as a figure in the Chirp-time (Tau1.5 and Tau0) space
+% Search range of component masses is 1.4 to 30 Solar Masses
 
 %Constants
 c = 3*10^8;

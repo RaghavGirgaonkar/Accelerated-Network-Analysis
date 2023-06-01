@@ -1,5 +1,9 @@
 function wave = gen2PNwaveform(fpos, ta, phase, fmin, fmax,m1, m2,datalen,initial_phase,snr,N,avec, normfac)
-%Returns normalized phase vector of waveform in the Fourier Domain
+%Creates and Returns normalized phase vector of waveform in the Fourier Domain
+%General expression for a 2PN waveform in a fourier domain is 
+% W(f) = A(f)exp(-iPsi(f)), this function returns exp(-iPsi(f))
+% Waveform generation happens through component mass values m1, m2 
+
 
 fwavepos = waveform(fpos,ta,phase,fmin,fmax,m1,m2,datalen,initial_phase, avec);
 

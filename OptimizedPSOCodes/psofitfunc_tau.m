@@ -1,5 +1,12 @@
 function [fitVal,varargout] = psofitfunc_tau(xVec,params)
+%Fitness function for Chirp-time Space PSO
+%Input: xVec: normalized location vector of mass parameters
+%       params: Struct containing signal and data parameters
+%Output: fitval: Fitness value at location specified by xVec
+%        varargout: Additional output arguments sucha as the index of max
+%        value in matchedfiltering timeseries
 
+%Raghav Girgaonkar, April 2023
 
 %rows: points
 %columns: coordinates of a point

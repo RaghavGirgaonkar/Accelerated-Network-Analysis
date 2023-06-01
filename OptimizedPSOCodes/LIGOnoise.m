@@ -1,5 +1,5 @@
 function [outNoise, PSD] = LIGOnoise(N, Fs, noise_num, noisefile)
-%% Function to create colored noise using LIGO Design Sensitivities 
+%Function to create colored noise using LIGO Design Sensitivities 
 % Design PSD is modified between 15 Hz and 700Hz.
 % Input: N = Total number of samples,
 %        Fs = Sampling Frequency,

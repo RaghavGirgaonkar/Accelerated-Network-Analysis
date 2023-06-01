@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of preprocessing</title>
+  <meta name="keywords" content="preprocessing">
+  <meta name="description" content="PREPROCESSING Function to create vectors used for waveform generation">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003-2019 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html OptimizedPSOCodes -->
+<h1>preprocessing
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>PREPROCESSING Function to create vectors used for waveform generation</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [A,avec, phaseDiff] = preprocessing(fmin,fmax,fpos, datalen, N) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">PREPROCESSING Function to create vectors used for waveform generation
+   Input: fmin: Low frequency cutoff for waveform 
+          fmax: High frequency cutoff for waveform
+          fpos: Positive frequency vector
+          datalen: total length of data in seconds
+          N: Total number of samples in data segment
+   Output: A: Frequency magnitude vector 
+           avec: matrix containing alpha terms used for waveform
+           generation
+           phaseDiff: phase difference vector for quadrature templates</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="rungwpso.html" class="code" title="function []=rungwpso(filename)">rungwpso</a>	Script to run Chirp-time or Mass Space PSO on a user specified datafile and PSD.</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Thu 01-Jun-2023 14:55:19 by <strong><a href="https://github.com/gllmflndn/m2html">m2html</a></strong> &copy; 2003-2022</address>
+</body>
+</html>

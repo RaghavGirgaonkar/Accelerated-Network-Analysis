@@ -1,11 +1,10 @@
 function [A,avec, phaseDiff] = preprocessing(fmin,fmax,fpos, datalen, N)
 %PREPROCESSING Function to create vectors used for waveform generation
-%   Input: fmin: Low frequnecy cutoff for waveform 
-%          fmax: High frequnecy cutoff for waveform
+%   Input: fmin: Low frequency cutoff for waveform 
+%          fmax: High frequency cutoff for waveform
 %          fpos: Positive frequency vector
 %          datalen: total length of data in seconds
 %          N: Total number of samples in data segment
-
 %   Output: A: Frequency magnitude vector 
 %           avec: matrix containing alpha terms used for waveform
 %           generation

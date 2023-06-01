@@ -1,12 +1,17 @@
 function outNoise = statgaussnoisegen(nSamples,psdVals,fltrOrdr,sampFreq, noise_num, noisefile)
 %Generate a realization of stationary Gaussian noise with given 2-sided PSD
-%Y = STATGAUSSNOISEGEN(N,PSD,O,Fs)
+%Y = STATGAUSSNOISEGEN(N,PSD,fltrOrdr,Fs, noise_num, noisefile)
 %Generates a realization Y of stationary gaussian noise with a target
-%2-sided power spectral density given by PSD. Fs is the sampling frequency
-%of Y. PSD is an M-by-2 matrix containing frequencies and the corresponding
-%PSD values in the first and second columns respectively. The frequencies
-%must start from 0 and end at Fs/2. The order of the FIR filter to be used
-%is given by O.
+%2-sided power spectral density given by PSD. 
+% Fs is the sampling frequency
+%of Y. 
+% PSD is an M-by-2 matrix containing frequencies and the corresponding
+%PSD values in the first and second columns respectively. 
+% The frequencies
+%must start from 0 and end at Fs/2. 
+% The order of the FIR filter to be usedis given by fltrOrdr.
+%(Optional) noise_num = noise realization number from a pre-created noise realizations file
+%(Optional) noisefile = pre-created noise realizations filename
 
 %Soumya D. Mohanty, Mar 2019
 

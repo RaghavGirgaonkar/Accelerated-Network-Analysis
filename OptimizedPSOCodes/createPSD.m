@@ -1,4 +1,4 @@
-%% Script to create interpolated PSD from SHAPES and PWELCH Estimates
+%Script to create interpolated PSD from SHAPES and PWELCH Estimates
 
 %% Provide Filename containing log-estimates for SHAPES and PWELCH
 S = load('~/Documents/linetest_Job_col_PSD_dataSz4Up2N1024SNRR5e-03_C.mat');

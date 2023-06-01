@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of waveform_tau</title>
+  <meta name="keywords" content="waveform_tau">
+  <meta name="description" content="Function to create Restricted 2PN Waveform in Fourier Domain">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003-2019 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html OptimizedPSOCodes -->
+<h1>waveform_tau
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Function to create Restricted 2PN Waveform in Fourier Domain</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function fwave = waveform_tau(fvec, t, phase, fmin, fmax,tau0, tau1p5,datalen,initial_phase,avec) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">Function to create Restricted 2PN Waveform in Fourier Domain
+Input: fvec = Row vector of positive DTFT frequencies 
+       t = Time of arrival in seconds
+       phase = Phase of Coalescence
+       fmin, fmax = minimum and maximum frequency cutoffs for the waveform
+       tau0, tau1.5 = Chirp-time parameters
+       datalen = Length of data realization in seconds
+       avec = Pre-calculated alpha term vector
+Output: fwave = Phase term of waveform in the Fourier domain</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="gen2PNwaveform_tau.html" class="code" title="function wave = gen2PNwaveform_tau(fpos, ta, phase, fmin, fmax,tau0, tau1p5,datalen,initial_phase,snr,N, avec, normfac)">gen2PNwaveform_tau</a>	Creates and Returns normalized phase vector of waveform in the Fourier Domain</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Thu 01-Jun-2023 14:55:19 by <strong><a href="https://github.com/gllmflndn/m2html">m2html</a></strong> &copy; 2003-2022</address>
+</body>
+</html>
