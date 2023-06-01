@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of innerprodpsd</title>
+  <meta name="keywords" content="innerprodpsd">
+  <meta name="description" content="Calculates the inner product of vectors X and Y for the case of Gaussian">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003-2019 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html OptimizedPSOCodes -->
+<h1>innerprodpsd
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Calculates the inner product of vectors X and Y for the case of Gaussian</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function innProd = innerprodpsd(fftY,fftXbyPSD) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">Calculates the inner product of vectors X and Y for the case of Gaussian
+ stationary noise having a specified power spectral density (PSD) Sn(f). 
+ Input: fftY = Normlized FFT vector of the phase term of quadrature template 
+        fftXbyPSD = FFT vector of data divided by PSD Sn(f) and
+                    multiplied by the frequency amplitude term A. 
+ Output: innProd: inner product value 
+The scalar normalization factor (1/N) is derived from Parseval's theorem.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="crcbgwpso_mass.html" class="code" title="function outResults = crcbgwpso_mass(inParams,psoParams,nRuns, sampling_freq)">crcbgwpso_mass</a>	Regression of 2PNWaveform using Mass Space PSO</li><li><a href="crcbgwpso_tau.html" class="code" title="function outResults = crcbgwpso_tau(inParams,psoParams,nRuns, sampling_freq)">crcbgwpso_tau</a>	Regression of 2PNWaveform using Chirp-Time Space PSO</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Thu 01-Jun-2023 15:09:51 by <strong><a href="https://github.com/gllmflndn/m2html">m2html</a></strong> &copy; 2003-2022</address>
+</body>
+</html>
