@@ -1,5 +1,6 @@
-function fwave = waveform_tau(fvec, t, phase, fmin, fmax,tau0, tau1p5,datalen,initial_phase,avec)
-%Function to create Restricted 2PN Waveform in Fourier Domain
+function fwave = waveform_tau_negative(fvec, t, phase, fmin, fmax,tau0, tau1p5,datalen,initial_phase,avec)
+%Function to create Restricted 2PN Waveform in Fourier Domain in the
+%Negative Chirp Time space
 %Input: fvec = Row vector of positive DTFT frequencies 
 %       t = Time of arrival in seconds
 %       phase = Phase of Coalescence
@@ -15,10 +16,32 @@ function fwave = waveform_tau(fvec, t, phase, fmin, fmax,tau0, tau1p5,datalen,in
 c = 3*10^8;
 % Msolar = 1.989*10^30;
 G = 6.6743*10^-11;
+
+%% Check for positive chirp-length and swap tau0 and tau1.5 values if yes
+if abs(tau0) < abs(tau1p5)
+    M = (5/(32*fmin))*(tau1p5/(pi*pi*tau0))*(c^3/G);
+
+    if tau0 < 0 && tau1p5 < 0
+        u = 1/(16*fmin*fmin)*(5/(4*pi^4*abs(tau0)*abs(tau1p5)^2))^(1/3)*(c^3/G);
+    else
+        u = (1/(16*fmin*fmin))*(5/(4*pi^4*tau0*tau1p5^2))^(1/3)*(c^3/G);
+    end
+    n = u/M;
+    %% Calculate Chirp Times
+    tau1 = -(5/(192*pi))*(1/fmin)*((G*M*pi*fmin/c^3)^(-1))*(1/n)*((743/336)+ (11*n/4));
+    tau2 = -(5/(128*pi))*(1/fmin)*((G*M*pi*fmin/c^3)^(-1/3))*(1/n)*((3058673/1016064) + (5429*n/1008) + (617*n*n/144));
+
+    if tau0 - tau1p5 + tau1 + tau2 > 0
+        temp = tau0;
+        tau0 = tau1p5;
+        tau1p5 = temp;
+    end
+end
+
 %% Calculate Mass Terms from Tau0 and Tau1.5
 M = (5/(32*fmin))*(tau1p5/(pi*pi*tau0))*(c^3/G);
 if tau0 < 0 && tau1p5 < 0
-    u = -(1/(16*fmin*fmin))*(5/(4*pi^4*abs(tau0)*abs(tau1p5)^2))^(1/3)*(c^3/G);
+    u = 1/(16*fmin*fmin)*(5/(4*pi^4*abs(tau0)*abs(tau1p5)^2))^(1/3)*(c^3/G);
 else
     u = (1/(16*fmin*fmin))*(5/(4*pi^4*tau0*tau1p5^2))^(1/3)*(c^3/G);
 end
@@ -30,11 +53,11 @@ n = u/M;
 
 % tau0 = (5/(256*pi))*(1/fmin)*((G*M*pi*fmin/c^3)^(-5/3))*(1/n);
 
-tau1 = (5/(192*pi))*(1/fmin)*((G*M*pi*fmin/c^3)^(-1))*(1/n)*((743/336)+ (11*n/4));
+tau1 = -(5/(192*pi))*(1/fmin)*((G*M*pi*fmin/c^3)^(-1))*(1/n)*((743/336)+ (11*n/4));
 
 % tau1p5 = (1/8)*(1/fmin)*((G*M*pi*fmin/c^3)^(-2/3))*(1/n);
 
-tau2 = (5/(128*pi))*(1/fmin)*((G*M*pi*fmin/c^3)^(-1/3))*(1/n)*((3058673/1016064) + (5429*n/1008) + (617*n*n/144));
+tau2 = -(5/(128*pi))*(1/fmin)*((G*M*pi*fmin/c^3)^(-1/3))*(1/n)*((3058673/1016064) + (5429*n/1008) + (617*n*n/144));
 
 %Alpha Terms
 alpha0 = 2*pi*fmin*(3*tau0/5);
@@ -55,11 +78,11 @@ alphaTerm(2:end) = alpha0*avec(1,:)...
 + alpha3*avec(4,:)... 
 + alpha4*avec(5,:);
 
-F = 2*pi*fvec*(tau0 + tau1 - tau1p5 + tau2);
+% F = 0*2*pi*fvec*(abs(tau0) + abs(tau1) - abs(tau1p5) + abs(tau2));
 
 %% Final Phase Term
 
-Psi = 2*pi*t*fvec - phase - pi/4 + alphaTerm + F + initial_phase;
+Psi = 2*pi*t*fvec - phase - pi/4 + alphaTerm + initial_phase;
 
 
 %% Final Expression

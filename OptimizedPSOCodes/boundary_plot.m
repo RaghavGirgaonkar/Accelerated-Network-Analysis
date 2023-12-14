@@ -1,4 +1,4 @@
-function boundary_fig = boundary_plot
+function [boundary_fig] = boundary_plot
 % Creates and returns a Boundary Plot as a figure in the Chirp-time (Tau1.5 and Tau0) space
 % Search range of component masses is 1.4 to 30 Solar Masses
 
@@ -19,7 +19,7 @@ m2 = m2*Msolar;
 M = (m1 + m2);
 u = m1.*m2./M;
 n = u./M;
-%Calculate Chirp Times
+%Calculate Chirp Times firt when m1 = m2
 tau0_1 = (5/(256*pi))*(1/fmin)*((G*M*pi*fmin/c^3).^(-5/3)).*(1./n);
 
 % tau1 = (5/(192*pi))*(1/fmin)*((G*M*pi*fmin/c^3)^(-1))*(1/n)*((743/336)+ (11*n/4));
@@ -63,6 +63,14 @@ Tau1p5 = [tau1p5_1, tau1p5_2, tau1p5_3];
 %Scatterplot
 sz = 5;
 c = 'black';
+% boundary_fig = figure;
+% hold on;
+% t1 = scatter(tau0_1, tau1p5_1,sz, 'red', 'filled', 'HandleVisibility','off');
+% hold on;
+% t2 = scatter(tau0_2, tau1p5_2,sz, c, 'filled', 'HandleVisibility','off');
+% hold on;
+% t3 = scatter(tau0_3, tau1p5_3,sz, c, 'filled', 'HandleVisibility','off');
+% hold off;
 boundary_fig = scatter(Tau0, Tau1p5,sz,c,"filled", 'DisplayName','Tau Space Boundary');
 % xlabel('\tau_0');
 % ylabel('\tau_{1.5}');

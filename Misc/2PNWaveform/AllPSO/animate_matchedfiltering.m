@@ -1,6 +1,6 @@
 function []=animate_matchedfiltering(filename)
 %% Read JSON File 
-% addpath("../../PSO/");
+addpath("../../AllPSO/");
 fname = filename;
 str = fileread(fname);
 filenames = jsondecode(str);
@@ -137,7 +137,7 @@ mftimeseries(i) = I;
 hold on;
 plot(timeVec, dataY); hold on;
 plot(timeVec, wave, Color='red' ); hold on;
-plot(timeVec, q0,Color='yellow'); hold on;
+plot(timeVec, 3*q0,Color='yellow'); hold on;
 plot(timeVec(1:i), mftimeseries(1:i), Color='black'); hold on;
 ylim([-4,12]);
 xlabel("Time (s)");

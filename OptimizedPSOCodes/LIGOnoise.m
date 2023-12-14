@@ -39,7 +39,7 @@ fvec = (0:(kNyq-1))*Fs/N;
 interPSD = interp1(y(:,1),y(:,2), fvec);
 
 %% Modifications, change cutoff frequencies as needed 
-minidx = find(fvec<=15, 1, 'last' );
+minidx = find(fvec<=30, 1, 'last' );
 maxidx = find(fvec<=700, 1, 'last' );
 
 Sn50 = interPSD(minidx);
@@ -53,7 +53,7 @@ PSD = interPSD.^2;
 %% Make colored Noise
 fltrOrdr = 10000;
 
-outNoise_t = statgaussnoisegen(N+ 2*fltrOrdr,[fvec(:),PSD(:)],fltrOrdr,Fs, noise_num, noisefile);
+outNoise_t = statgaussnoisegen(N,[fvec(:),PSD(:)],fltrOrdr,Fs, noise_num, noisefile);
 
 outNoise = outNoise_t(fltrOrdr+1:end - fltrOrdr);
 
