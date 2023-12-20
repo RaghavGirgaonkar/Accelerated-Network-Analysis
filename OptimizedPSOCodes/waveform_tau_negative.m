@@ -18,7 +18,7 @@ c = 3*10^8;
 G = 6.6743*10^-11;
 
 %% Check for positive chirp-length and swap tau0 and tau1.5 values if yes
-if abs(tau0) < abs(tau1p5)
+
     M = (5/(32*fmin))*(tau1p5/(pi*pi*tau0))*(c^3/G);
 
     if tau0 < 0 && tau1p5 < 0
@@ -32,11 +32,12 @@ if abs(tau0) < abs(tau1p5)
     tau2 = -(5/(128*pi))*(1/fmin)*((G*M*pi*fmin/c^3)^(-1/3))*(1/n)*((3058673/1016064) + (5429*n/1008) + (617*n*n/144));
 
     if tau0 - tau1p5 + tau1 + tau2 > 0
+%         disp('In here');
         temp = tau0;
         tau0 = tau1p5;
         tau1p5 = temp;
     end
-end
+
 
 %% Calculate Mass Terms from Tau0 and Tau1.5
 M = (5/(32*fmin))*(tau1p5/(pi*pi*tau0))*(c^3/G);
