@@ -74,30 +74,31 @@ for lpruns = 1:nRuns
     outResults.allRunsOutput(lpruns).allBestLoc = outStruct(lpruns).allBestLoc;
     fitVal(lpruns) = outStruct(lpruns).bestFitness;
     outResults.allRunsOutput(lpruns).fitVal = fitVal(lpruns);
-    [~,qcCoefs,ta_index] = fHandle(outStruct(lpruns).bestLocation);
+    [~,chirptimes,~] = fHandle(outStruct(lpruns).bestLocation);
 %     Q = qcCoefs
 %     index = ta_index
-    outResults.allRunsOutput(lpruns).qcCoefs = qcCoefs;
+    [estAmp, estTa, estPhase] = getparamestimates(chirptimes, params);
+    outResults.allRunsOutput(lpruns).qcCoefs = chirptimes;
     %Calculate time using sampling freq and ta_index
-    estTa = ta_index/sampling_freq;
+%     estTa = ta_index/sampling_freq;
     
     outResults.allRunsOutput(lpruns).estTa = estTa;
-    tau0 = qcCoefs(1);
-    tau1p5 = qcCoefs(2);
-    phaseq0 = gen2PNwaveform_tau(params.fpos, estTa, 0, params.frange(1), params.frange(2), tau0,...
-    tau1p5,params.datalen,0,1,params.N,params.avec, params.normfac);
-    fftq0 = phaseq0;
-    fftq1 = phaseq0.*params.phaseDiff;
-    %Estimated Phase
-%     yq0 = inParams.dataY*q0(:);
-%     yq1 = inParams.dataY*q1(:);
-    yq0 = innerprodpsd(fftq0, params.fftdataYbyPSD);
-    yq1 = innerprodpsd(fftq1, params.fftdataYbyPSD);
-    estPhase = atan2(yq1,yq0);
+%     tau0 = qcCoefs(1);
+%     tau1p5 = qcCoefs(2);
+%     phaseq0 = gen2PNwaveform_tau(params.fpos, estTa, 0, params.frange(1), params.frange(2), tau0,...
+%     tau1p5,params.datalen,0,1,params.N,params.avec, params.normfac);
+%     fftq0 = phaseq0;
+%     fftq1 = phaseq0.*params.phaseDiff;
+%     %Estimated Phase
+% %     yq0 = inParams.dataY*q0(:);
+% %     yq1 = inParams.dataY*q1(:);
+%     yq0 = innerprodpsd(fftq0, params.fftdataYbyPSD);
+%     yq1 = innerprodpsd(fftq1, params.fftdataYbyPSD);
+%     estPhase = atan2(yq1,yq0);
     outResults.allRunsOutput(lpruns).estPhase = estPhase;
 
     %Estimated Amplitude
-    estAmp = cos(estPhase)*yq0 + sin(estPhase)*yq1;
+%     estAmp = cos(estPhase)*yq0 + sin(estPhase)*yq1;
     outResults.allRunsOutput(lpruns).estAmp = estAmp;
     
     %Estimated Signal
