@@ -83,8 +83,8 @@ for lpruns = 1:nRuns
 %     estTa = ta_index/sampling_freq;
     
     outResults.allRunsOutput(lpruns).estTa = estTa;
-%     tau0 = qcCoefs(1);
-%     tau1p5 = qcCoefs(2);
+    tau0 = chirptimes(1);
+    tau1p5 = chirptimes(2);
 %     phaseq0 = gen2PNwaveform_tau_negative(params.fpos, estTa, 0, params.frange(1), params.frange(2), tau0,...
 %     tau1p5,params.datalen,0,1,params.N,params.avec, params.normfac);
 %     fftq0 = phaseq0;
