@@ -72,29 +72,32 @@ for lpruns = 1:nRuns
     outResults.allRunsOutput(lpruns).allBestLoc = outStruct(lpruns).allBestLoc;
     fitVal(lpruns) = outStruct(lpruns).bestFitness;
     outResults.allRunsOutput(lpruns).fitVal = fitVal(lpruns);
-    [~,qcCoefs,ta_index] = fHandle(outStruct(lpruns).bestLocation);
+    [~,masses,~] = fHandle(outStruct(lpruns).bestLocation);
 
-    outResults.allRunsOutput(lpruns).qcCoefs = qcCoefs;
+    outResults.allRunsOutput(lpruns).qcCoefs = masses;
+
+    %Get parameter estimates
+    [estAmp, estTa, estPhase] = getparamestimates_mass(chirptimes, params);
     %Calculate time using sampling freq and ta_index
-    estTa = ta_index/sampling_freq;
+%     estTa = ta_index/sampling_freq;
     
     outResults.allRunsOutput(lpruns).estTa = estTa;
-    m1 = qcCoefs(1);
-    m2 = qcCoefs(2);
-    phaseq0 = gen2PNwaveform(params.fpos, estTa, 0, params.frange(1), params.frange(2), m1,...
-    m2,params.datalen,0,1,params.N,params.avec, params.normfac);
-
-    fftq0 = phaseq0;
-    fftq1 = phaseq0.*params.phaseDiff;
-    
-
-    yq0 = innerprodpsd(fftq0, params.fftdataYbyPSD);
-    yq1 = innerprodpsd(fftq1, params.fftdataYbyPSD);
-    estPhase = atan2(yq1,yq0);
+    m1 = masses(1);
+    m2 = masses(2);
+%     phaseq0 = gen2PNwaveform(params.fpos, estTa, 0, params.frange(1), params.frange(2), m1,...
+%     m2,params.datalen,0,1,params.N,params.avec, params.normfac);
+% 
+%     fftq0 = phaseq0;
+%     fftq1 = phaseq0.*params.phaseDiff;
+%     
+% 
+%     yq0 = innerprodpsd(fftq0, params.fftdataYbyPSD);
+%     yq1 = innerprodpsd(fftq1, params.fftdataYbyPSD);
+%     estPhase = atan2(yq1,yq0);
     outResults.allRunsOutput(lpruns).estPhase = estPhase;
 
     %Estimated Amplitude
-    estAmp = cos(estPhase)*yq0 + sin(estPhase)*yq1;
+%     estAmp = cos(estPhase)*yq0 + sin(estPhase)*yq1;
     outResults.allRunsOutput(lpruns).estAmp = estAmp;
     %Estimated Signal
 
