@@ -135,6 +135,8 @@ plot(timeVec(1:end - 54*sampFreq),mftimeseries); title('MFTimeseries Test3'); xl
 %First generate normalized whiten data realization
 [whtndseg,~, TFtotal] = segdatacond(noise, PSD, sampFreq, [1,20*sampFreq]);
 
+ whtndseg = whtndseg;
+
 %Generate whitened signal
 whtndsig = ifft(fft(signal).*TFtotal);
 
@@ -168,7 +170,45 @@ plot(timeVec,mf2); title('MF2 Test4'); xlabel('t');
 figure;
 plot(timeVec(1:end - 54*sampFreq),mftimeseries); title('MFTimeseries Test4'); xlabel('t');
 
+%Test 5, add injection directly into strain data, but scaled by the stdv of
+%the whitened data.
 
+%Get stdv
+[~,wstdv,~] = segdatacond(noise, PSD, sampFreq, [1,200*sampFreq]);
+
+% Create signal and scale 
+
+sigscaled = signal*wstdv;
+
+%Add to strain
+
+straindata = noise + sigscaled;
+
+  % Input Parameters Structure:
+inParams = struct('fpos', fpos,...
+                  'dataY', straindata,...
+                  'frange', frange,...
+                  'datalen',datalen,...,
+                  'initial_phase', initial_phase,...
+                  'N', N,...
+                  'A', A,...
+                  'phaseDiff', phaseDiff,...
+                  'avec', avec,...
+		          'T_sig', 54,...
+                  'PSDtotal',PSDtotal,...
+                  'Fs',sampFreq);
+
+[mf1,mf2,max_val,max_arg] = mfgw_tau_new(chirptimes, inParams);
+mftimeseries = sqrt(mf1(1:end - 54*sampFreq).^2 + mf2(1:end - 54*sampFreq).^2);
+
+figure;
+plot(timeVec,mf1); title('MF1 Test5'); xlabel('t');
+
+figure;
+plot(timeVec,mf2); title('MF2 Test5'); xlabel('t');
+
+figure;
+plot(timeVec(1:end - 54*sampFreq),mftimeseries); title('MFTimeseries Test5'); xlabel('t');
 
 
 
