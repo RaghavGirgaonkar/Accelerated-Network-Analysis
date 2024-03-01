@@ -48,6 +48,7 @@ Sn700 = interPSD(maxidx);
 interPSD(1:minidx) = Sn50;
 interPSD(maxidx:end) = Sn700;
 
+%Convert Amplitude spectral density to Power Spectral Density
 PSD = interPSD.^2;
 
 %% Make colored Noise

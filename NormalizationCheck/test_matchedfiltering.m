@@ -138,7 +138,7 @@ plot(timeVec(1:end - 54*sampFreq),mftimeseries); title('MFTimeseries Test3'); xl
  whtndseg = whtndseg;
 
 %Generate whitened signal
-whtndsig = ifft(fft(signal).*TFtotal);
+whtndsig = ifft(fft(signal).*(TFtotal));
 
 %Add whitened signal to normalized whitened data
 whtndseg = whtndseg + whtndsig;
@@ -212,8 +212,38 @@ plot(timeVec(1:end - 54*sampFreq),mftimeseries); title('MFTimeseries Test5'); xl
 
 
 
+%Test 6, matched filtering on whitened data normalized to unit variance:
 
 
+%First generate normalized whiten data realization
+[whtndseg,~, TFtotal] = segdatacond(noise, PSD, sampFreq, [1,Tsig*sampFreq]);
+
+% Input Parameters Structure:
+inParams = struct('fpos', fpos,...
+                  'dataY', whtndseg,...
+                  'frange', frange,...
+                  'datalen',datalen,...,
+                  'initial_phase', initial_phase,...
+                  'N', N,...
+                  'A', A,...
+                  'phaseDiff', phaseDiff,...
+                  'avec', avec,...
+		          'T_sig', 54,...
+                  'PSDtotal',PSDtotal,...
+                  'TFtotal',TFtotal,...
+                  'Fs',sampFreq);
+
+[mf1,mf2,max_val,max_arg] = mfgw_tau_whtnd(chirptimes, inParams);
+mftimeseries = sqrt(mf1(1:end - 54*sampFreq).^2 + mf2(1:end - 54*sampFreq).^2);
+
+figure;
+plot(timeVec,mf1); title('MF1 Test6'); xlabel('t');
+
+figure;
+plot(timeVec,mf2); title('MF2 Test6'); xlabel('t');
+
+figure;
+plot(timeVec(1:end - 54*sampFreq),mftimeseries); title('MFTimeseries Test6'); xlabel('t');
 
 
 
