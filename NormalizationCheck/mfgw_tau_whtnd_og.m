@@ -1,4 +1,4 @@
-function [mf1, mf2, mfVal, max_arg] = mfgw_tau_new(x,params)
+function [mf1,mf2,mfVal, max_arg] = mfgw_tau_whtnd_og(x,params)
 %MatchedFiltering for Chirp time space PSO
 %Generates a combined matched-filtering timeseries from both quadrature templates and 
 %returns index and value of the maximum of this series,
@@ -19,9 +19,9 @@ q1 = ifft(gen2PNtemplate_tau(params.fpos, 0, pi/2, params.frange(1), params.fran
     tau1p5,params.datalen,0,1,params.N,params.A,params.avec, params.PSDtotal));
 
 %Compute fitness value after maximizing by matched filtering
-mf1 = mlftr(params.dataY, q0, params.PSDtotal);
-mf2 = mlftr(params.dataY, q1, params.PSDtotal);
-% mf1 = mlftr2(params.dataY, q0, params.TFtotal);
-% mf2 = mlftr2(params.dataY, q1, params.TFtotal);
+mf1 = mlftr2(params.dataY, q0, params.TFtotal);
+mf2 = mlftr2(params.dataY, q1, params.TFtotal);
+% mf1 = matchedfiltering(params.fftdataYbyPSD, fftq0);
+% mf2 = matchedfiltering(params.fftdataYbyPSD, fftq1);
 [max_val, max_arg] = max(mf1(1:end - params.T_sig*params.Fs).^2 + mf2(1:end - params.T_sig*params.Fs).^2);
 mfVal = -1*max_val;

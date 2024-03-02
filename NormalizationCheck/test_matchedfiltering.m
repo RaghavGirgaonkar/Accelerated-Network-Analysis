@@ -24,7 +24,7 @@ PSDtotal = [PSD, PSD((kNyq-negFStrt):-1:2)];
 
  [A,avec, phaseDiff] = preprocessing(frange(1),frange(2),fpos, datalen, N);
 
- signal = gen2PNtemplate_tau(fpos, ta, phase, frange(1), frange(2),chirptimes(1), chirptimes(2),datalen,initial_phase,snr, N, A, avec, PSDtotal);
+ signal = ifft(gen2PNtemplate_tau(fpos, ta, phase, frange(1), frange(2),chirptimes(1), chirptimes(2),datalen,initial_phase,snr, N, A, avec, PSDtotal));
 
  figure;
  plot(timeVec,signal);
@@ -82,7 +82,7 @@ inParams = struct('fpos', fpos,...
                   'TFtotal',TFtotal,...
                   'Fs',sampFreq);
 
-[mf1,mf2,max_val,max_arg] = mfgw_tau_whtnd(chirptimes, inParams);
+[mf1,mf2,max_val,max_arg] = mfgw_tau_whtnd_og(chirptimes, inParams);
 mftimeseries = sqrt(mf1(1:end - 54*sampFreq).^2 + mf2(1:end - 54*sampFreq).^2);
 
 figure;
@@ -116,7 +116,7 @@ inParams = struct('fpos', fpos,...
                   'TFtotal',TFtotal,...
                   'Fs',sampFreq);
 
-[mf1,mf2,max_val,max_arg] = mfgw_tau_whtnd(chirptimes, inParams);
+[mf1,mf2,max_val,max_arg] = mfgw_tau_whtnd_og(chirptimes, inParams);
 mftimeseries = sqrt(mf1(1:end - 54*sampFreq).^2 + mf2(1:end - 54*sampFreq).^2);
 
 figure;
@@ -158,7 +158,7 @@ inParams = struct('fpos', fpos,...
                   'TFtotal',TFtotal,...
                   'Fs',sampFreq);
 
-[mf1,mf2,max_val,max_arg] = mfgw_tau_whtnd(chirptimes, inParams);
+[mf1,mf2,max_val,max_arg] = mfgw_tau_whtnd_og(chirptimes, inParams);
 mftimeseries = sqrt(mf1(1:end - 54*sampFreq).^2 + mf2(1:end - 54*sampFreq).^2);
 
 figure;
@@ -216,7 +216,7 @@ plot(timeVec(1:end - 54*sampFreq),mftimeseries); title('MFTimeseries Test5'); xl
 
 
 %First generate normalized whiten data realization
-[whtndseg,~, TFtotal] = segdatacond(noise, PSD, sampFreq, [1,Tsig*sampFreq]);
+[whtndseg,~, TFtotal] = segdatacond(noise, PSD, sampFreq, [1,datalen*sampFreq]);
 
 % Input Parameters Structure:
 inParams = struct('fpos', fpos,...
@@ -233,7 +233,7 @@ inParams = struct('fpos', fpos,...
                   'TFtotal',TFtotal,...
                   'Fs',sampFreq);
 
-[mf1,mf2,max_val,max_arg] = mfgw_tau_whtnd(chirptimes, inParams);
+[mf1,mf2,max_val,max_arg] = mfgw_tau_whtnd_og(chirptimes, inParams);
 mftimeseries = sqrt(mf1(1:end - 54*sampFreq).^2 + mf2(1:end - 54*sampFreq).^2);
 
 figure;
@@ -245,9 +245,64 @@ plot(timeVec,mf2); title('MF2 Test6'); xlabel('t');
 figure;
 plot(timeVec(1:end - 54*sampFreq),mftimeseries); title('MFTimeseries Test6'); xlabel('t');
 
+%Test 7: Inject signal directly into the strain data scaled by the whtnd
+%stdv
+
+[~,wstdv, ~] = segdatacond(noise, PSD, sampFreq, [1,datalen*sampFreq]);
+
+straindata = noise + wstdv*signal;
+
+[whtndseg,~, TFtotal] = segdatacond(straindata, PSD, sampFreq, [1,20*sampFreq]);
+
+ % Input Parameters Structure:
+inParams = struct('fpos', fpos,...
+                  'dataY', whtndseg,...
+                  'frange', frange,...
+                  'datalen',datalen,...,
+                  'initial_phase', initial_phase,...
+                  'N', N,...
+                  'A', A,...
+                  'phaseDiff', phaseDiff,...
+                  'avec', avec,...
+		          'T_sig', 54,...
+                  'PSDtotal',PSDtotal,...
+                  'TFtotal',TFtotal,...
+                  'Fs',sampFreq);
+
+[mf1,mf2,max_val,max_arg] = mfgw_tau_whtnd_og(chirptimes, inParams);
+mftimeseries = sqrt(mf1(1:end - 54*sampFreq).^2 + mf2(1:end - 54*sampFreq).^2);
+
+figure;
+plot(timeVec,mf1); title('MF1 Test7'); xlabel('t');
+
+figure;
+plot(timeVec,mf2); title('MF2 Test7'); xlabel('t');
+
+figure;
+plot(timeVec(1:end - 54*sampFreq),mftimeseries); title('MFTimeseries Test7'); xlabel('t');
 
 
+%Test 8: Repeat Test 7 100 times and get histogram of recovered SNR
 
+snrs = [];
+for i = 1:100
+    disp(i);
+    [noise, ~] = LIGOnoise(N, sampFreq, 1, 'sample');
+    [~,wstdv, ~] = segdatacond(noise, PSD, sampFreq, [1,datalen*sampFreq]);
+
+    straindata = noise + wstdv*signal;
+
+    [whtndseg,~, TFtotal] = segdatacond(straindata, PSD, sampFreq, [1,20*sampFreq]);
+    inParams.dataY = whtndseg;
+    [~,~,max_val,~] = mfgw_tau_whtnd_og(chirptimes, inParams);
+    snrs = [snrs, sqrt(-max_val)];
+end
+
+figure;
+histogram(snrs, 50);
+hold on;
+xline(snr);
+hold off;
 
 
 
