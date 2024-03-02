@@ -16,9 +16,8 @@ q1 = gen2PNtemplate_tau(params.fpos, 0, pi/2, params.frange(1), params.frange(2)
 mf1 = mlftr2(params.dataY, q0, params.TFtotal);
 mf2 = mlftr2(params.dataY, q1, params.TFtotal);
 [max_val, max_arg] = max(mf1(1:end - params.T_sig*params.Fs).^2 + mf2(1:end - params.T_sig*params.Fs).^2);
-mfVal = -1*max_val;
 %Estimated SNR
-estAmp = sqrt(mfVal);
+estAmp = sqrt(max_val);
 %Estimated TOA:
 estTa = max_arg/params.Fs;
 

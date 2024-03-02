@@ -1,4 +1,4 @@
-function [mf1, mf2, mfVal, max_arg] = mfgw_tau_whtnd(x,params)
+function [mfVal, max_arg] = mfgw_tau_whtnd(x,params)
 %MatchedFiltering for Chirp time space PSO
 %Generates a combined matched-filtering timeseries from both quadrature templates and 
 %returns index and value of the maximum of this series,
