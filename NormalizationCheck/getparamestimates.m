@@ -1,22 +1,24 @@
-function [estAmp, estTa, estPhase] = getparamestimates(chirptimes, params)
+function [estAmp, estTa, estPhase] = getparamestimates(x, params)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
-tau0 = chirptimes(1);
-tau1p5 = chirptimes(2);
-phaseq0 = gen2PNwaveform_tau(params.fpos, 0, 0, params.frange(1), params.frange(2), tau0,...
-    tau1p5,params.datalen,0,1,params.N,params.avec, params.normfac);
-
-fftq0 = phaseq0;
-
-fftq1 = phaseq0.*params.phaseDiff;
+%Generate normalized quadrature templates
+tau0 = x(1);
+tau1p5 = x(2);
+q0 = gen2PNtemplate_tau(params.fpos, 0, 0, params.frange(1), params.frange(2), tau0,...
+    tau1p5,params.datalen,0,1,params.N,params.A,params.avec, params.PSDtotal);
+q1 = gen2PNtemplate_tau(params.fpos, 0, pi/2, params.frange(1), params.frange(2), tau0,...
+    tau1p5,params.datalen,0,1,params.N,params.A,params.avec, params.PSDtotal);
 
 %Compute fitness value after maximizing by matched filtering
-mf1 = matchedfiltering(params.fftdataYbyPSD, fftq0);
-mf2 = matchedfiltering(params.fftdataYbyPSD, fftq1);
+% mf1 = mlftr(params.dataY, q0, params.PSDtotal);
+% mf2 = mlftr(params.dataY, q1, params.PSDtotal);
+mf1 = mlftr2(params.dataY, q0, params.TFtotal);
+mf2 = mlftr2(params.dataY, q1, params.TFtotal);
 [max_val, max_arg] = max(mf1(1:end - params.T_sig*params.Fs).^2 + mf2(1:end - params.T_sig*params.Fs).^2);
+mfVal = -1*max_val;
 %Estimated SNR
-estAmp = sqrt(max_val);
+estAmp = sqrt(mfVal);
 %Estimated TOA:
 estTa = max_arg/params.Fs;
 

@@ -26,7 +26,7 @@ for lpc = 1:nVecs
     % Only the body of this block should be replaced for different fitness
     % functions
         x = xVec(lpc,:);
-        [fitVal(lpc), max_index] = mfgw_tau(x, params);
+        [fitVal(lpc), max_index] = mfgw_tau_whtnd(x, params);
     end
 end
 

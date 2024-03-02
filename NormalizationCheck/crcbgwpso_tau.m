@@ -57,7 +57,7 @@ end
 %Independent runs of PSO in parallel. Change 'parfor' to 'for' if the
 %parallel computing toolbox is not available.
 % fprintf("Running PSO\n");
-% parpool(nRuns);
+parpool(nRuns);
 parfor lpruns = 1:nRuns
     %Reset random number generator for each worker
     rng(lpruns);
@@ -103,8 +103,8 @@ for lpruns = 1:nRuns
     
     %Estimated Signal
 %     estSigTemp = genqc(timeVecSig,1,qcCoefs,estPhase);
-    estSigphase = gen2PNwaveform_tau(params.fpos, estTa, estPhase, params.frange(1), params.frange(2), tau0,...
-    tau1p5,params.datalen,0,estAmp,params.N,params.avec, params.normfac);
+    estSigphase = gen2PNtemplate_tau(params.fpos, estTa, estPhase, params.frange(1), params.frange(2), tau0,...
+    tau1p5,params.datalen,0,estAmp,params.N,params.A,params.avec, params.PSDtotal);
     estSigfourier = (params.A).*estSigphase;
     estSig = ifft(estSigfourier);
 %     estSigTemp_shifted = [zeros(1,floor(estTa*sampling_freq)-1), estSigTemp, zeros(1, nSamples - nSamplesSig - floor(estTa*sampling_freq)+1)];
