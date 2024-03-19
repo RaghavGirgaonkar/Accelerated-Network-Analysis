@@ -32,7 +32,6 @@ G = 6.6743*10^-11;
     tau2 = -(5/(128*pi))*(1/fmin)*((G*M*pi*fmin/c^3)^(-1/3))*(1/n)*((3058673/1016064) + (5429*n/1008) + (617*n*n/144));
 
     if tau0 - tau1p5 + tau1 + tau2 > 0
-%         disp('In here');
         temp = tau0;
         tau0 = tau1p5;
         tau1p5 = temp;
