@@ -38,9 +38,11 @@ whtndfftfiltdata = fftfiltdata.*TFtotal;
 
 whtndfiltdata = ifft(whtndfftfiltdata);
 
+
 %Divide by variance of whitened strain so that final whitened vector has
 %unit strain
 tstart = tidxs(1);
 tend = tidxs(2);
 whtndstd = std(whtndfiltdata(tstart: tend));
-whtndfiltdata = whtndfiltdata/whtndstd;
+whtndfiltdata = whtndfiltdata/sqrt(sampFreq);
+% whtndfiltdata = whtndfiltdata/whtndstd;

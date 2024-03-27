@@ -2,7 +2,7 @@
 sampFreq = 4096;
 datalen = 512;
 N = datalen*sampFreq;
-frange = [30,100];
+frange = [30,700];
 fpos = (0:floor(N/2))*(1/datalen);
 timeVec = (0:(datalen*sampFreq - 1))/sampFreq;
 
@@ -24,7 +24,10 @@ PSDtotal = [PSD, PSD((kNyq-negFStrt):-1:2)];
 
  [A,avec, phaseDiff] = preprocessing(frange(1),frange(2),fpos, datalen, N);
 
- signal = ifft(gen2PNtemplate_tau(fpos, ta, phase, frange(1), frange(2),chirptimes(1), chirptimes(2),datalen,initial_phase,snr, N, A, avec, PSDtotal));
+ signal = gen2PNtemplate_tau(fpos, ta, phase, frange(1), frange(2),chirptimes(1), chirptimes(2),datalen,initial_phase,snr, N, A, avec, PSDtotal);
+ 
+signal = signal*sqrt(sampFreq);
+%  signal = signal/norm(signal);
 
  figure;
  plot(timeVec,signal);
@@ -65,7 +68,7 @@ plot(timeVec(1:end - 54*sampFreq),mftimeseries); title('MFTimeseries Test1'); xl
 
 [whtndseg,wstdv, TFtotal] = segdatacond(straindata, PSD, sampFreq, [1,20*sampFreq]);
 
-whtndseg = whtndseg*wstdv;
+% whtndseg = whtndseg*wstdv;
 
 % Input Parameters Structure:
 inParams = struct('fpos', fpos,...

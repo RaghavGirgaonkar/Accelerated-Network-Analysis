@@ -13,10 +13,10 @@ function [mf1,mf2,mfVal, max_arg] = mfgw_tau_whtnd_og(x,params)
 %Generate normalized quadrature templates
 tau0 = x(1);
 tau1p5 = x(2);
-q0 = ifft(gen2PNtemplate_tau(params.fpos, 0, 0, params.frange(1), params.frange(2), tau0,...
-    tau1p5,params.datalen,0,1,params.N,params.A,params.avec, params.PSDtotal));
-q1 = ifft(gen2PNtemplate_tau(params.fpos, 0, pi/2, params.frange(1), params.frange(2), tau0,...
-    tau1p5,params.datalen,0,1,params.N,params.A,params.avec, params.PSDtotal));
+q0 = gen2PNtemplate_tau(params.fpos, 0, 0, params.frange(1), params.frange(2), tau0,...
+    tau1p5,params.datalen,0,1,params.N,params.A,params.avec, params.PSDtotal);
+q1 = gen2PNtemplate_tau(params.fpos, 0, pi/2, params.frange(1), params.frange(2), tau0,...
+    tau1p5,params.datalen,0,1,params.N,params.A,params.avec, params.PSDtotal);
 
 %Compute fitness value after maximizing by matched filtering
 mf1 = mlftr2(params.dataY, q0, params.TFtotal);

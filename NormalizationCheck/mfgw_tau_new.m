@@ -13,15 +13,16 @@ function [mf1, mf2, mfVal, max_arg] = mfgw_tau_new(x,params)
 %Generate normalized quadrature templates
 tau0 = x(1);
 tau1p5 = x(2);
-q0 = ifft(gen2PNtemplate_tau(params.fpos, 0, 0, params.frange(1), params.frange(2), tau0,...
-    tau1p5,params.datalen,0,1,params.N,params.A,params.avec, params.PSDtotal));
-q1 = ifft(gen2PNtemplate_tau(params.fpos, 0, pi/2, params.frange(1), params.frange(2), tau0,...
-    tau1p5,params.datalen,0,1,params.N,params.A,params.avec, params.PSDtotal));
+q0 = gen2PNtemplate_tau(params.fpos, 0, 0, params.frange(1), params.frange(2), tau0,...
+    tau1p5,params.datalen,0,1,params.N,params.A,params.avec, params.PSDtotal);
+q1 = gen2PNtemplate_tau(params.fpos, 0, pi/2, params.frange(1), params.frange(2), tau0,...
+    tau1p5,params.datalen,0,1,params.N,params.A,params.avec, params.PSDtotal);
 
 %Compute fitness value after maximizing by matched filtering
 mf1 = mlftr(params.dataY, q0, params.PSDtotal);
 mf2 = mlftr(params.dataY, q1, params.PSDtotal);
 % mf1 = mlftr2(params.dataY, q0, params.TFtotal);
 % mf2 = mlftr2(params.dataY, q1, params.TFtotal);
+% [max_val, max_arg] = max(mf1(1:end - params.T_sig*params.Fs).^2 + mf2(1:end - params.T_sig*params.Fs).^2);
 [max_val, max_arg] = max(mf1(1:end - params.T_sig*params.Fs).^2 + mf2(1:end - params.T_sig*params.Fs).^2);
 mfVal = -1*max_val;

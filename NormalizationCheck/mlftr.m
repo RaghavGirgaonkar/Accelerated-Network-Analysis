@@ -1,5 +1,5 @@
 function [mftimeseries] = mlftr(X,Y,PSD)
 %MLFTR 
-mftimeseries = ifft((fft(X)./PSD).*conj(fft(Y)));
+mftimeseries = (1/4096)*ifft((fft(X)./PSD).*conj(fft(Y)));
 end
 

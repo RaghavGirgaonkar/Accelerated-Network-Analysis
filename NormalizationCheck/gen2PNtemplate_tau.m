@@ -16,11 +16,12 @@ end
 
 fwave = [fwavepos, fwaveneg];
 wf = ifft(A.*fwave);
-% fftwf = A.*fwave;
+fftwf = A.*fwave;
 
 %Normalize to unit 1
 % normfac = 1/sqrt(innerproduct_optmzd(fftwf,fftwf,PSDtotal));
-normfac = 1/sqrt(innerproduct(wf,wf,PSDtotal));
+% normfac = 1/sqrt(innerproduct(wf,wf,PSDtotal));
+normfac = 1/sqrt(innerproduct_W(wf,wf,PSDtotal));
 
 % Create final signal
 signal = snr*normfac*wf;
