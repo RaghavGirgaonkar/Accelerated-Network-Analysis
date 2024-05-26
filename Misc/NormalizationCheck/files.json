@@ -1,0 +1,11 @@
+{
+"psdfile": "psdestimates.mat",
+"noisefile": "50_noise_realizations.mat",
+"datafile": "/Users/kqa493/Desktop/Accelerated-Network-Analysis/examples/L-L1_LOSC_CLN_4_V1-1187007040-2048_dtrndWhtnBndpss.hdf5",
+"output_struct_location": "/scratch/09197/raghav/PSD-Estimation/outStruct_tau.mat",
+"bestlocplot": "/scratch/09197/raghav/PSD-Estimation/bestloc_tau.png",
+"bestfitplot": "/scratch/09197/raghav/PSD-Estimation/bestfitness_tau.png",
+"psoresultplot": "/scratch/09197/raghav/PSD-Estimation/psoresults_tau.png",
+"fitnessvaluesfile": "/scratch/09197/raghav/PSD-Estimation/fitness_values.txt",
+"fitvalimgfile": "1-1.mat"
+}
